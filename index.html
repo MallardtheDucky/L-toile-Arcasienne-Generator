@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- OpenGraph Meta Tags for Link Previews -->
+    <meta property="og:title" content="L'Étoile Arcasienne - Official Article Generator" />
+    <meta property="og:description" content="Create authentic 1976 front-page articles for Arcasia's premier conservative-liberal daily newspaper. 'Ainsi toujours aux tyrans — et à l’étatisme!'" />
+    <meta property="og:type" content="website" />
+    
+    <title>L'Étoile Arcasienne Generator</title>
+    
+    <style>
+        :root {
+            --arcasian-navy: #1a2942;
+            --arcasian-gold: #d4af37;
+            --paper-cream: #f4f1ea;
+            --ink-black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d1522;
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 30px;
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        /* Editor Section */
+        .editor-panel {
+            background: #f4f1ea;
+            padding: 30px;
+            border-radius: 4px;
+            border-top: 6px solid var(--arcasian-gold);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            color: var(--ink-black);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--arcasian-navy);
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"], textarea, input[type="date"] {
+            background-color: #fff;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 180px;
+            line-height: 1.5;
+        }
+
+        .file-input {
+            background: #fff;
+            padding: 8px;
+            width: 100%;
+            border: 1px dashed #999;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            background: var(--arcasian-navy);
+            color: var(--paper-cream);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        button:hover {
+            background: var(--arcasian-gold);
+            color: var(--arcasian-navy);
+        }
+
+        /* Newspaper Preview Section */
+        .preview-panel {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .newspaper-page {
+            background: var(--paper-cream);
+            width: 700px; /* Traditional vertical aspect */
+            min-height: 1000px;
+            padding: 50px 40px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            color: var(--ink-black);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Masthead */
+        .masthead {
+            text-align: center;
+            border-bottom: 4px double var(--arcasian-navy);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+        .logo-svg {
+            width: 100%;
+            height: auto;
+            max-height: 100px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--arcasian-navy);
+            margin-bottom: 25px;
+        }
+
+        /* Headline */
+        .headline {
+            font-size: 48px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.05;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        /* Image Box */
+        .photo-container {
+            width: 100%;
+            border: 1px solid #333;
+            padding: 5px;
+            margin-bottom: 25px;
+            background: #fff;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(100%) contrast(110%) brightness(95%);
+        }
+
+        /* Multi-column Body */
+        .article-body {
+            column-count: 2;
+            column-gap: 30px;
+            text-align: justify;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .article-body p {
+            margin-bottom: 15px;
+            text-indent: 20px;
+        }
+
+        .article-body p:first-child {
+            text-indent: 0;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            border-radius: 2px;
+        }
+
+        footer {
+            background: #090e16;
+            padding: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 40px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1100px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .editor-panel {
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+            .newspaper-page {
+                width: 100%;
+                padding: 30px 20px;
+            }
+            .headline {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Editor Left -->
+        <div class="editor-panel">
+            <h1>Ventrie Editorial Desk</h1>
+            
+            <div class="form-group">
+                <label>Edition Date</label>
+                <input type="date" id="dateInput" value="1976-08-12">
+            </div>
+
+            <div class="form-group">
+                <label>Main Headline</label>
+                <input type="text" id="headlineInput" value="WALKER'S LEGACY VINDICATED AS MARKETS SURGE">
+            </div>
+
+            <div class="form-group">
+                <label>Article Photograph</label>
+                <input type="file" id="imageInput" accept="image/*" class="file-input">
+            </div>
+
+            <div class="form-group">
+                <label>Body Text</label>
+                <textarea id="bodyInput">In a striking vindication of Arcasian liberal economics, the stock markets rallied today, proving once again that deregulation and privatization are the twin engines of prosperity. 
+
+Philippe Laurent Beaumont, writing from the Ventrie headquarters, noted that the recent pushback against union militancy has restored investor confidence. "The state has no business in the boardrooms of our great enterprises," Beaumont wrote.
+
+While the Reform Party continues to champion burdensome oversight, the numbers speak for themselves. Dwight Walker's vision of a free and unencumbered market remains the only viable path forward for the Arcasian dream.</textarea>
+            </div>
+
+            <div class="export-buttons">
+                <button onclick="exportImage('png')">Export PNG</button>
+                <button onclick="exportImage('jpeg')">Export JPG</button>
+            </div>
+            <div id="status" class="status-message"></div>
+        </div>
+
+        <!-- Preview Right -->
+        <div class="preview-panel">
+            <div class="newspaper-page" id="printableArea">
+                <div class="masthead">
+                    <svg class="logo-svg" viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Star -->
+                        <path d="M300 10 L308 35 L335 35 L313 52 L322 78 L300 62 L278 78 L287 52 L265 35 L292 35 Z" fill="#d4af37" opacity="0.6"/>
+                        <!-- Text -->
+                        <text x="300" y="65" font-family="Georgia, serif" font-size="42" font-weight="900" fill="#1a2942" text-anchor="middle" letter-spacing="3">L'ÉTOILE ARCASIENNE</text>
+                        <text x="300" y="90" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#333" text-anchor="middle">« Ainsi toujours aux tyrans — et à l’étatisme! »</text>
+                    </svg>
+                </div>
+
+                <div class="meta-info">
+                    <span id="displayLocation">VENTRIE, ÎLE-DE-VENTRIE</span>
+                    <span id="displayDate">THURSDAY, AUGUST 12, 1976</span>
+                    <span>PRICE: 2 ARCASIAN FRANCS</span>
+                </div>
+
+                <h2 class="headline" id="displayHeadline">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</h2>
+
+                <div class="photo-container" id="photoBox" style="display:none;">
+                    <img id="displayImage" src="" alt="Article Photo">
+                </div>
+
+                <div class="article-body" id="displayBody">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026. All rights to the Suzerain universe owned by Torpor Games. Fan-made Generator by TaPingvinLahkoLeti.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        function updatePreview() {
+            const headline = document.getElementById('headlineInput').value;
+            const body = document.getElementById('bodyInput').value;
+            const rawDate = document.getElementById('dateInput').value;
+
+            // Update Headline
+            document.getElementById('displayHeadline').innerText = headline.toUpperCase();
+
+            // Update Date
+            if (rawDate) {
+                const dateObj = new Date(rawDate);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('displayDate').innerText = dateObj.toLocaleDateString('en-US', options).toUpperCase();
+            }
+
+            // Update Body Text
+            const paragraphs = body.split('\n\n').filter(p => p.trim() !== "");
+            const htmlBody = paragraphs.map(p => `<p>${p}</p>`).join('');
+            document.getElementById('displayBody').innerHTML = htmlBody;
+        }
+
+        // Image Handling
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            const photoBox = document.getElementById('photoBox');
+            const displayImg = document.getElementById('displayImage');
+
+            reader.onload = function(event) {
+                displayImg.src = event.target.result;
+                photoBox.style.display = 'block';
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                photoBox.style.display = 'none';
+            }
+        });
+
+        // Listen for typing
+        document.getElementById('headlineInput').addEventListener('input', updatePreview);
+        document.getElementById('bodyInput').addEventListener('input', updatePreview);
+        document.getElementById('dateInput').addEventListener('change', updatePreview);
+
+        async function exportImage(format) {
+            const status = document.getElementById('status');
+            const element = document.getElementById('printableArea');
+            
+            status.style.display = 'block';
+            status.style.background = '#e1f5fe';
+            status.style.color = '#01579b';
+            status.innerText = "Processing high-resolution print...";
+
+            try {
+                const canvas = await html2canvas(element, {
+                    scale: 2, // High resolution
+                    useCORS: true,
+                    backgroundColor: "#f4f1ea"
+                });
+
+                const link = document.createElement('a');
+                link.download = `letoile-arcasienne-${Date.now()}.${format === 'jpeg' ? 'jpg' : 'png'}`;
+                link.href = canvas.toDataURL(`image/${format}`, 0.9);
+                link.click();
+
+                status.innerText = "Export Complete!";
+                status.style.background = "#c8e6c9";
+                status.style.color = "#2e7d32";
+            } catch (err) {
+                console.error(err);
+                status.innerText = "Export Failed. Please try a smaller image.";
+                status.style.background = "#ffcdd2";
+                status.style.color = "#c62828";
+            }
+            
+            setTimeout(() => status.style.display = 'none', 5000);
+        }
+
+        // Run initially
+        window.onload = updatePreview;
+    </script>
+</body>
+</html>
