@@ -6,7 +6,7 @@
     
     <!-- GitHub / Open Graph Meta Tags -->
     <title>L'Étoile Arcasienne | Newspaper Generator</title>
-    <meta name="description" content="Create custom, authentic-looking Arcasian newspaper front pages from the Suzerain universe. Generate articles, adjust images, and export in high quality.">
+    <meta name="description" content="Generate articles, adjust images, and export in high quality.">
     <meta property="og:title" content="L'Étoile Arcasienne - Official Newspaper Generator">
     <meta property="og:description" content="Publish your own news from Ventrie. Create, edit, and download high-quality Arcasian newspaper covers.">
     <meta property="og:type" content="website">
@@ -220,6 +220,9 @@
         /* Unified Layout DOM Elements */
         .np-main { display: flex; flex-direction: column; }
         
+        .np-section-category { display: none; }
+        .np-ornament { display: none; }
+        
         .np-headline-group { text-align: center; margin-bottom: 25px; }
         .np-headline {
             font-family: var(--font-headline); font-weight: 800; text-transform: uppercase;
@@ -231,18 +234,22 @@
             text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; display: none;
         }
 
-        /* Image Wrapper with CSS transform hooks */
+        /* Image Wrapper with Canva-style Background logic */
         .np-image-container {
             border: 2px solid var(--news-text); padding: 3px; background: #fff; position: relative;
         }
         .np-image-wrapper {
-            width: 100%; overflow: hidden; position: relative; background: #ddd; display: flex; justify-content: center; align-items: center;
+            width: 100%; overflow: hidden; position: relative; background: #ddd; display: block;
         }
         .np-image {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            /* Default B&W filter */
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            display: block;
+            /* Default filters */
             filter: grayscale(100%) contrast(1.15); 
-            transform-origin: center center;
         }
         .np-image.sepia { filter: sepia(0.6) contrast(1.1) brightness(0.9); }
         .np-image.color { filter: contrast(1.05); }
@@ -306,6 +313,39 @@
         .layout-textheavy .np-image-wrapper { aspect-ratio: 1/1; }
         .layout-textheavy .np-content { column-count: 2; column-gap: 25px; }
 
+        /* 5. Text Only - Two Column Editorial */
+        .layout-text-two-col .np-col-image { display: none; }
+        .layout-text-two-col .np-section-category {
+            display: block; text-align: center; font-family: var(--font-headline); font-size: 22px;
+            font-weight: 700; color: var(--news-blue); margin-bottom: 5px;
+        }
+        .layout-text-two-col .np-headline-group { order: 1; margin-bottom: 15px; text-align: center; }
+        .layout-text-two-col .np-headline { font-size: 38px; color: var(--news-blue); line-height: 1.2; text-transform: none; }
+        .layout-text-two-col .np-subheadline-bar {
+            display: block; background: transparent; color: #333; font-family: var(--font-body);
+            font-size: 17px; font-style: normal; text-transform: none; letter-spacing: normal;
+            padding: 0; margin-top: 10px; font-weight: 400;
+        }
+        .layout-text-two-col .np-ornament {
+            display: flex; order: 2; margin: 15px auto 25px auto; width: 85%; align-items: center; color: var(--news-blue);
+        }
+        .layout-text-two-col .np-layout-columns { order: 3; display: block; }
+        .layout-text-two-col .np-content { column-count: 2; column-gap: 35px; font-size: 15px; }
+
+        /* 6. Text Only - Three Column Bulletin */
+        .layout-text-three-col .np-col-image { display: none; }
+        .layout-text-three-col .np-section-category {
+            display: block; font-family: var(--font-headline); font-size: 18px; font-weight: bold;
+            text-transform: uppercase; border-bottom: 2px solid var(--news-text); padding-bottom: 5px; margin-bottom: 15px;
+        }
+        .layout-text-three-col .np-headline-group { order: 1; margin-bottom: 20px; text-align: left; }
+        .layout-text-three-col .np-headline { font-size: 46px; text-align: left; line-height: 1.1; }
+        .layout-text-three-col .np-subheadline-bar {
+            display: block; background: var(--news-text); color: var(--news-bg); font-size: 16px; padding: 8px; margin-top: 15px;
+        }
+        .layout-text-three-col .np-layout-columns { order: 3; display: block; }
+        .layout-text-three-col .np-content { column-count: 3; column-gap: 25px; font-size: 14.5px; }
+
 
         /* Status Toast */
         #status-toast {
@@ -347,7 +387,14 @@
                     <option value="layout-launch">Modern Product Launch</option>
                     <option value="layout-feature">Full-Width Feature Story</option>
                     <option value="layout-textheavy">Three-Column Economic Report</option>
+                    <option value="layout-text-two-col">Text Only - Editorial (Two Column)</option>
+                    <option value="layout-text-three-col">Text Only - Bulletin (Three Column)</option>
                 </select>
+            </div>
+
+            <div class="form-group" id="categoryGroup" style="display: none;">
+                <label for="inCategory">Section Category</label>
+                <input type="text" id="inCategory" value="Domestic — Arcasia">
             </div>
 
             <div class="form-group">
@@ -375,8 +422,8 @@
                 <input type="text" id="inSubheadline" value="A NEW ERA OF SMART LIVING STARTS HERE">
             </div>
 
-            <div class="form-group">
-                <label>Frontpage Photograph</label>
+            <div class="form-group" id="imageUploadGroup">
+                <label>Frontpage Photograph (Canva-style Frame)</label>
                 <div class="file-upload-wrapper">
                     <div class="file-upload-btn" id="uploadText">Choose Image File...</div>
                     <input type="file" id="imageUpload" accept="image/*">
@@ -392,15 +439,15 @@
                 <div id="imageAdjustments" style="display: none;">
                     <div class="slider-group">
                         <label><span>Zoom</span> <span id="valZoom">1.0x</span></label>
-                        <input type="range" id="imgZoom" min="0.5" max="3" step="0.05" value="1">
+                        <input type="range" id="imgZoom" min="1" max="3" step="0.05" value="1">
                     </div>
                     <div class="slider-group">
-                        <label><span>Horizontal Position</span> <span id="valPanX">0%</span></label>
-                        <input type="range" id="imgPanX" min="-100" max="100" step="1" value="0">
+                        <label><span>Horizontal Pan</span> <span id="valPanX">50%</span></label>
+                        <input type="range" id="imgPanX" min="0" max="100" step="1" value="50">
                     </div>
                     <div class="slider-group">
-                        <label><span>Vertical Position</span> <span id="valPanY">0%</span></label>
-                        <input type="range" id="imgPanY" min="-100" max="100" step="1" value="0">
+                        <label><span>Vertical Pan</span> <span id="valPanY">50%</span></label>
+                        <input type="range" id="imgPanY" min="0" max="100" step="1" value="50">
                     </div>
                 </div>
             </div>
@@ -436,7 +483,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
                     <div class="np-header">
                         <div class="np-logo-container">
                             <h1 class="np-logo">L'Étoile<span class="star">★</span>Arcasienne</h1>
-                            <p class="np-motto">« Ainsi toujours aux tyrans — et à l'étatisme! »</p>
+                            <p class="np-motto">« Ainsi toujours aux tyrans, et à l'étatisme! »</p>
                         </div>
                         <hr class="np-divider-thick">
                         <div class="np-info-row">
@@ -449,9 +496,19 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
 
                     <!-- Unified Body Content (Rearranged via CSS Layouts) -->
                     <div class="np-main">
+                        <div class="np-section-category" id="outCategory">Domestic — Arcasia</div>
+                        
                         <div class="np-headline-group">
                             <h2 class="np-headline" id="outHeadline">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</h2>
                             <div class="np-subheadline-bar" id="outSubheadline">A NEW ERA OF SMART LIVING STARTS HERE</div>
+                        </div>
+
+                        <div class="np-ornament">
+                            <div style="flex: 1; height: 1px; background: currentColor;"></div>
+                            <svg viewBox="0 0 50 30" style="width: 50px; height: 25px; fill: currentColor; margin: 0 15px;">
+                                <path d="M25,0 L40,15 L25,30 L10,15 Z" />
+                            </svg>
+                            <div style="flex: 1; height: 1px; background: currentColor;"></div>
                         </div>
 
                         <div class="np-layout-columns">
@@ -459,7 +516,8 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
                             <div class="np-col-image">
                                 <div class="np-image-container">
                                     <div class="np-image-wrapper">
-                                        <img id="outImage" class="np-image grayscale" src="" style="display:none;">
+                                        <!-- Replaced img with div for background-image framework -->
+                                        <div id="outImage" class="np-image grayscale" style="display:none;"></div>
                                         <div class="np-image-placeholder" id="placeholder">Insert Photograph</div>
                                     </div>
                                 </div>
@@ -507,13 +565,21 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             const template = templateSelect.value;
             captureArea.className = template; 
 
-            // Toggle Editor Fields based on template
-            document.getElementById('subheadlineGroup').style.display = 
-                (template === 'layout-launch' || template === 'layout-feature') ? 'block' : 'none';
-            document.getElementById('quoteGroup').style.display = 
-                (template === 'layout-launch') ? 'block' : 'none';
+            // Toggle Editor Fields based on template layout requirements
+            const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col'].includes(template);
+            document.getElementById('subheadlineGroup').style.display = needsSubheadline ? 'block' : 'none';
+
+            const needsQuote = template === 'layout-launch';
+            document.getElementById('quoteGroup').style.display = needsQuote ? 'block' : 'none';
+
+            const needsCategory = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
+            document.getElementById('categoryGroup').style.display = needsCategory ? 'block' : 'none';
+
+            const isTextOnly = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
+            document.getElementById('imageUploadGroup').style.display = isTextOnly ? 'none' : 'block';
 
             // Update Text Elements
+            document.getElementById('outCategory').innerText = document.getElementById('inCategory').value;
             document.getElementById('outLocation').innerText = document.getElementById('inLocation').value;
             document.getElementById('outDate').innerText = document.getElementById('inDate').value;
             document.getElementById('outPrice').innerText = document.getElementById('inPrice').value;
@@ -535,7 +601,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
 
             // Image Source & Filter
             if (currentImageSrc) {
-                outImage.src = currentImageSrc;
+                outImage.style.backgroundImage = `url("${currentImageSrc}")`;
                 outImage.style.display = 'block';
                 placeholder.style.display = 'none';
                 outImage.className = `np-image ${currentFilter}`;
@@ -556,12 +622,17 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             document.getElementById('valPanX').innerText = panX + '%';
             document.getElementById('valPanY').innerText = panY + '%';
             
-            // Apply CSS transform
-            outImage.style.transform = `scale(${zoom}) translate(${panX}%, ${panY}%)`;
+            // Canva-Style Image Framing (Background Image Approach):
+            // - background-position controls how the image aligns within the fixed crop box
+            // - transform-origin defines the anchor for the zoom
+            // - transform: scale enlarges the aligned image bounds
+            outImage.style.backgroundPosition = `${panX}% ${panY}%`;
+            outImage.style.transformOrigin = `${panX}% ${panY}%`;
+            outImage.style.transform = `scale(${zoom})`;
         }
 
         // --- Event Listeners for Live Typing & Sliders ---
-        const inputs = ['inLocation', 'inDate', 'inPrice', 'inHeadline', 'inSubheadline', 'inContent', 'inQuote', 'templateSelect'];
+        const inputs = ['inLocation', 'inDate', 'inPrice', 'inHeadline', 'inSubheadline', 'inContent', 'inQuote', 'inCategory', 'templateSelect'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', updatePreview);
         });
