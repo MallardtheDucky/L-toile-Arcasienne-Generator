@@ -4,414 +4,677 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- OpenGraph Meta Tags for Link Previews -->
-    <meta property="og:title" content="L'Étoile Arcasienne - Official Article Generator" />
-    <meta property="og:description" content="Create authentic 1976 front-page articles for Arcasia's premier conservative-liberal daily newspaper. 'Ainsi toujours aux tyrans — et à l’étatisme!'" />
-    <meta property="og:type" content="website" />
+    <!-- GitHub / Open Graph Meta Tags -->
+    <title>L'Étoile Arcasienne | Newspaper Generator</title>
+    <meta name="description" content="Create custom, authentic-looking Arcasian newspaper front pages from the Suzerain universe. Generate articles, adjust images, and export in high quality.">
+    <meta property="og:title" content="L'Étoile Arcasienne - Official Newspaper Generator">
+    <meta property="og:description" content="Publish your own news from Ventrie. Create, edit, and download high-quality Arcasian newspaper covers.">
+    <meta property="og:type" content="website">
     
-    <title>L'Étoile Arcasienne Generator</title>
-    
+    <!-- Google Fonts for Vintage Newspaper Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- html2canvas library -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
     <style>
+        /* CSS Reset & Variables */
         :root {
-            --arcasian-navy: #1a2942;
-            --arcasian-gold: #d4af37;
-            --paper-cream: #f4f1ea;
-            --ink-black: #111111;
+            --app-bg: #0f172a; 
+            --app-panel: #1e293b;
+            --app-text: #e2e8f0;
+            --app-accent: #d69e2e; 
+            
+            --news-bg: #f4f0e6; 
+            --news-text: #171717;
+            --news-blue: #162c4e; 
+            
+            --font-logo: 'Playfair Display', serif;
+            --font-headline: 'Playfair Display', serif;
+            --font-body: 'Lora', serif;
+            --font-ui: 'Oswald', sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0d1522;
-            font-family: 'Georgia', serif;
+            font-family: var(--font-body);
+            background-color: var(--app-bg);
+            color: var(--app-text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* App Layout */
+        .app-header {
+            background-color: var(--news-blue);
+            padding: 15px 30px;
+            text-align: center;
+            border-bottom: 4px solid var(--app-accent);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .app-header h1 {
+            font-family: var(--font-logo);
             color: #fff;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 20px auto;
-            display: grid;
-            grid-template-columns: 450px 1fr;
-            gap: 30px;
-            flex: 1;
-            padding: 0 20px;
-        }
-
-        /* Editor Section */
-        .editor-panel {
-            background: #f4f1ea;
-            padding: 30px;
-            border-radius: 4px;
-            border-top: 6px solid var(--arcasian-gold);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            color: var(--ink-black);
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        h1 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--arcasian-navy);
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-            text-transform: uppercase;
+            font-size: 28px;
             letter-spacing: 1px;
         }
+        
+        .app-header h1 span { color: var(--app-accent); }
 
-        .form-group {
-            margin-bottom: 18px;
+        .main-container {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 20px;
+            padding: 20px;
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
         }
+
+        /* Editor Panel */
+        .editor-panel {
+            background: var(--app-panel);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            height: calc(100vh - 120px);
+            border: 1px solid #334155;
+        }
+        
+        .editor-panel::-webkit-scrollbar { width: 8px; }
+        .editor-panel::-webkit-scrollbar-track { background: #0f172a; }
+        .editor-panel::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+
+        .editor-title {
+            font-family: var(--font-ui);
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: var(--app-accent);
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .form-group { margin-bottom: 18px; }
 
         label {
             display: block;
-            font-weight: bold;
+            font-family: var(--font-ui);
+            font-size: 14px;
             margin-bottom: 6px;
-            color: #444;
-            font-size: 12px;
+            color: #94a3b8;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        input[type="text"], textarea, input[type="date"] {
-            background-color: #fff;
+        input[type="text"], textarea, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #bbb;
-            border-radius: 2px;
+            padding: 10px 12px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            color: #fff;
+            font-family: var(--font-body);
             font-size: 15px;
-            font-family: inherit;
+            transition: border-color 0.2s;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 180px;
-            line-height: 1.5;
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--app-accent);
         }
 
-        .file-input {
-            background: #fff;
-            padding: 8px;
-            width: 100%;
-            border: 1px dashed #999;
-            cursor: pointer;
-            font-size: 13px;
+        textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+
+        /* File Upload */
+        .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-upload-btn {
+            border: 1px dashed #475569; color: #94a3b8; background-color: #0f172a;
+            padding: 12px 20px; border-radius: 4px; font-family: var(--font-ui);
+            font-size: 15px; text-align: center; cursor: pointer; width: 100%;
+            transition: all 0.2s; text-transform: uppercase;
+        }
+        .file-upload-wrapper:hover .file-upload-btn { border-color: var(--app-accent); color: var(--app-accent); }
+        .file-upload-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; }
+
+        /* Image Tools & Sliders */
+        .image-tools { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 15px; }
+        .btn-filter {
+            flex: 1; padding: 8px; background: #334155; border: none; color: white;
+            border-radius: 4px; cursor: pointer; font-family: var(--font-ui);
+            font-size: 12px; text-transform: uppercase;
+        }
+        .btn-filter.active { background: var(--app-accent); color: #000; }
+
+        .slider-group { margin-bottom: 12px; background: #0f172a; padding: 10px; border-radius: 4px; border: 1px solid #334155;}
+        .slider-group label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; color: #cbd5e1; }
+        .slider-group input[type="range"] {
+            width: 100%; accent-color: var(--app-accent); cursor: pointer;
         }
 
-        .export-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        /* Export */
+        .export-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-export {
+            flex: 1; padding: 14px; background: var(--app-accent); color: #0f172a;
+            border: none; border-radius: 4px; font-family: var(--font-ui);
+            font-size: 16px; font-weight: 600; text-transform: uppercase;
+            cursor: pointer; transition: background 0.2s, transform 0.1s;
         }
+        .btn-export:hover { background: #ecc94b; }
+        .btn-export:active { transform: scale(0.98); }
 
-        button {
-            flex: 1;
-            padding: 12px;
-            background: var(--arcasian-navy);
-            color: var(--paper-cream);
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 13px;
-        }
-
-        button:hover {
-            background: var(--arcasian-gold);
-            color: var(--arcasian-navy);
-        }
-
-        /* Newspaper Preview Section */
+        /* Preview Panel */
         .preview-panel {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            background: #0f172a; border-radius: 8px; display: flex; justify-content: center;
+            align-items: flex-start; overflow: hidden; position: relative; height: calc(100vh - 120px);
+        }
+        .preview-scroll-container {
+            width: 100%; height: 100%; overflow: auto; padding: 20px; display: flex; justify-content: center;
+        }
+        .preview-scroll-container::-webkit-scrollbar { width: 8px; height: 8px; }
+        .preview-scroll-container::-webkit-scrollbar-track { background: #0f172a; }
+        .preview-scroll-container::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+
+        /* ========================================= */
+        /* NEWSPAPER CAPTURE AREA (The actual paper) */
+        /* ========================================= */
+        #capture-area {
+            width: 800px;
+            min-height: 1050px;
+            background-color: var(--news-bg);
+            /* Vintage Noise Texture via CSS */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+            color: var(--news-text);
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transform-origin: top center;
+            position: relative;
         }
 
-        .newspaper-page {
-            background: var(--paper-cream);
-            width: 700px; /* Traditional vertical aspect */
-            min-height: 1000px;
-            padding: 50px 40px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
-            color: var(--ink-black);
-            display: flex;
-            flex-direction: column;
+        /* Common Elements */
+        .np-header { margin-bottom: 20px; }
+        .np-logo-container { text-align: center; margin-bottom: 10px; }
+        .np-logo {
+            font-family: var(--font-logo); font-size: 65px; font-weight: 800;
+            color: var(--news-blue); letter-spacing: -1px; line-height: 1; margin: 0; text-transform: uppercase;
+        }
+        .np-logo .star { color: #b8860b; font-size: 55px; vertical-align: middle; margin: 0 5px; }
+        .np-motto { font-family: var(--font-body); font-style: italic; font-size: 14px; color: #444; margin-top: 5px; }
+
+        .np-divider-thick { border: 0; border-top: 4px solid var(--news-text); border-bottom: 1px solid var(--news-text); height: 7px; margin: 15px 0; }
+        .np-divider-thin { border: 0; border-top: 1px solid var(--news-text); margin: 15px 0 25px 0; }
+        
+        .np-info-row {
+            display: flex; justify-content: space-between; font-family: var(--font-logo);
+            font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 0 10px;
         }
 
-        /* Masthead */
-        .masthead {
-            text-align: center;
-            border-bottom: 4px double var(--arcasian-navy);
-            padding-bottom: 10px;
-            margin-bottom: 5px;
+        /* Unified Layout DOM Elements */
+        .np-main { display: flex; flex-direction: column; }
+        
+        .np-headline-group { text-align: center; margin-bottom: 25px; }
+        .np-headline {
+            font-family: var(--font-headline); font-weight: 800; text-transform: uppercase;
+            line-height: 1.05; color: var(--news-text);
+        }
+        .np-subheadline-bar {
+            background-color: var(--news-text); color: var(--news-bg); padding: 10px;
+            font-family: var(--font-logo); font-weight: 700; font-size: 20px;
+            text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; display: none;
         }
 
-        .logo-svg {
-            width: 100%;
-            height: auto;
-            max-height: 100px;
+        /* Image Wrapper with CSS transform hooks */
+        .np-image-container {
+            border: 2px solid var(--news-text); padding: 3px; background: #fff; position: relative;
+        }
+        .np-image-wrapper {
+            width: 100%; overflow: hidden; position: relative; background: #ddd; display: flex; justify-content: center; align-items: center;
+        }
+        .np-image {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            /* Default B&W filter */
+            filter: grayscale(100%) contrast(1.15); 
+            transform-origin: center center;
+        }
+        .np-image.sepia { filter: sepia(0.6) contrast(1.1) brightness(0.9); }
+        .np-image.color { filter: contrast(1.05); }
+
+        .np-image-placeholder {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-ui); color: #666; font-size: 18px; z-index: 10; background: #ddd;
         }
 
-        .meta-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--arcasian-navy);
-            margin-bottom: 25px;
+        /* Text Engine */
+        .np-content {
+            font-family: var(--font-body); font-size: 15px; line-height: 1.6; text-align: justify;
+        }
+        .np-content p { margin-bottom: 15px; text-indent: 25px; }
+        .np-content p:first-child { text-indent: 0; }
+        
+        .np-quote-box {
+            background: var(--news-text); color: var(--news-bg); padding: 20px;
+            font-family: var(--font-logo); font-style: italic; font-size: 16px;
+            text-align: center; margin-top: 20px; break-inside: avoid; display: none;
         }
 
-        /* Headline */
-        .headline {
-            font-size: 48px;
-            font-weight: 900;
-            text-align: center;
-            line-height: 1.05;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: -1px;
+        /* ========================================= */
+        /* CSS LAYOUT ENGINE                         */
+        /* ========================================= */
+
+        /* 1. Historic (Image 2 style) */
+        .layout-historic .np-headline-group { order: 1; }
+        .layout-historic .np-headline { font-size: 52px; }
+        .layout-historic .np-layout-columns { order: 2; display: flex; flex-direction: column; }
+        .layout-historic .np-col-image { margin: 0 auto 25px auto; width: 100%; }
+        .layout-historic .np-image-wrapper { aspect-ratio: 16/10; }
+        .layout-historic .np-content { column-count: 2; column-gap: 35px; }
+
+        /* 2. Product Launch (Image 1 style) */
+        .layout-launch .np-headline-group { order: 1; margin-bottom: 20px; }
+        .layout-launch .np-headline { font-size: 65px; letter-spacing: -1px; }
+        .layout-launch .np-subheadline-bar { display: block; }
+        .layout-launch .np-layout-columns { order: 2; display: flex; gap: 25px; }
+        .layout-launch .np-col-image { width: 45%; }
+        .layout-launch .np-col-text { width: 55%; }
+        .layout-launch .np-image-wrapper { aspect-ratio: 3/4; }
+        .layout-launch .np-content { column-count: 2; column-gap: 20px; }
+        .layout-launch .np-quote-box { display: block; }
+
+        /* 3. Feature Story */
+        .layout-feature .np-col-image { order: 1; margin-bottom: 25px; width: 100%; }
+        .layout-feature .np-headline-group { order: 2; border-bottom: 2px solid var(--news-text); padding-bottom: 20px; margin-bottom: 20px; }
+        .layout-feature .np-headline { font-size: 58px; }
+        .layout-feature .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); padding: 0; font-size: 24px; text-transform: none; font-style: italic; font-weight: 500; border: none; letter-spacing: normal;}
+        .layout-feature .np-layout-columns { order: 3; display: flex; flex-direction: column; }
+        .layout-feature .np-image-wrapper { aspect-ratio: 2/1; }
+        .layout-feature .np-content { column-count: 3; column-gap: 25px; font-size: 14.5px; }
+
+        /* 4. Text-Heavy Economic */
+        .layout-textheavy .np-headline-group { order: 1; margin-bottom: 15px; text-align: left; }
+        .layout-textheavy .np-headline { font-size: 42px; text-align: left; }
+        .layout-textheavy .np-layout-columns { order: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .layout-textheavy .np-col-image { grid-column: 1 / 2; }
+        .layout-textheavy .np-col-text { grid-column: 2 / 4; }
+        .layout-textheavy .np-image-wrapper { aspect-ratio: 1/1; }
+        .layout-textheavy .np-content { column-count: 2; column-gap: 25px; }
+
+
+        /* Status Toast */
+        #status-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #10b981; color: white; padding: 12px 24px; border-radius: 4px;
+            font-family: var(--font-ui); font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none; z-index: 1000;
         }
 
-        /* Image Box */
-        .photo-container {
-            width: 100%;
-            border: 1px solid #333;
-            padding: 5px;
-            margin-bottom: 25px;
-            background: #fff;
+        /* Responsive App Layout */
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+            .editor-panel { height: auto; max-height: 50vh; }
+            .preview-panel { height: auto; min-height: 50vh; }
         }
-
-        .photo-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: grayscale(100%) contrast(110%) brightness(95%);
-        }
-
-        /* Multi-column Body */
-        .article-body {
-            column-count: 2;
-            column-gap: 30px;
-            text-align: justify;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .article-body p {
-            margin-bottom: 15px;
-            text-indent: 20px;
-        }
-
-        .article-body p:first-child {
-            text-indent: 0;
-        }
-
-        .status-message {
-            margin-top: 15px;
-            padding: 10px;
-            font-size: 13px;
-            text-align: center;
-            display: none;
-            border-radius: 2px;
-        }
-
+        
         footer {
-            background: #090e16;
-            padding: 30px;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-            margin-top: 40px;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 1100px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            .editor-panel {
-                position: relative;
-                top: 0;
-                width: 100%;
-            }
-            .newspaper-page {
-                width: 100%;
-                padding: 30px 20px;
-            }
-            .headline {
-                font-size: 32px;
-            }
+            background: var(--app-panel); color: #64748b; text-align: center; padding: 15px;
+            font-family: var(--font-ui); font-size: 12px; border-top: 1px solid #334155; margin-top: auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Editor Left -->
+    <header class="app-header">
+        <h1>L'ÉTOILE <span>★</span> ARCASIENNE</h1>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- Editor Panel -->
         <div class="editor-panel">
-            <h1>Ventrie Editorial Desk</h1>
-            
+            <h2 class="editor-title">Editorial Desk</h2>
+
             <div class="form-group">
-                <label>Edition Date</label>
-                <input type="date" id="dateInput" value="1976-08-12">
+                <label for="templateSelect">Newspaper Layout</label>
+                <select id="templateSelect">
+                    <option value="layout-historic">1976 Historic Frontpage</option>
+                    <option value="layout-launch">Modern Product Launch</option>
+                    <option value="layout-feature">Full-Width Feature Story</option>
+                    <option value="layout-textheavy">Three-Column Economic Report</option>
+                </select>
             </div>
 
             <div class="form-group">
-                <label>Main Headline</label>
-                <input type="text" id="headlineInput" value="WALKER'S LEGACY VINDICATED AS MARKETS SURGE">
+                <label for="inLocation">Location</label>
+                <input type="text" id="inLocation" value="VENTRIE, ÎLE-DE-VENTRIE">
             </div>
 
             <div class="form-group">
-                <label>Article Photograph</label>
-                <input type="file" id="imageInput" accept="image/*" class="file-input">
+                <label for="inDate">Date</label>
+                <input type="text" id="inDate" value="THURSDAY, AUGUST 12, 1976">
             </div>
 
             <div class="form-group">
-                <label>Body Text</label>
-                <textarea id="bodyInput">In a striking vindication of Arcasian liberal economics, the stock markets rallied today, proving once again that deregulation and privatization are the twin engines of prosperity. 
+                <label for="inPrice">Price / Right Meta</label>
+                <input type="text" id="inPrice" value="PRICE: 2 ARCASIAN FRANCS">
+            </div>
+
+            <div class="form-group">
+                <label for="inHeadline">Headline</label>
+                <textarea id="inHeadline" style="min-height: 70px;">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</textarea>
+            </div>
+
+            <div class="form-group" id="subheadlineGroup" style="display: none;">
+                <label for="inSubheadline">Subheadline / Highlight</label>
+                <input type="text" id="inSubheadline" value="A NEW ERA OF SMART LIVING STARTS HERE">
+            </div>
+
+            <div class="form-group">
+                <label>Frontpage Photograph</label>
+                <div class="file-upload-wrapper">
+                    <div class="file-upload-btn" id="uploadText">Choose Image File...</div>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+                
+                <div class="image-tools" id="filterTools">
+                    <button class="btn-filter active" data-filter="grayscale">B&W</button>
+                    <button class="btn-filter" data-filter="sepia">Sepia</button>
+                    <button class="btn-filter" data-filter="color">Color</button>
+                </div>
+
+                <!-- Image Adjustment Sliders -->
+                <div id="imageAdjustments" style="display: none;">
+                    <div class="slider-group">
+                        <label><span>Zoom</span> <span id="valZoom">1.0x</span></label>
+                        <input type="range" id="imgZoom" min="0.5" max="3" step="0.05" value="1">
+                    </div>
+                    <div class="slider-group">
+                        <label><span>Horizontal Position</span> <span id="valPanX">0%</span></label>
+                        <input type="range" id="imgPanX" min="-100" max="100" step="1" value="0">
+                    </div>
+                    <div class="slider-group">
+                        <label><span>Vertical Position</span> <span id="valPanY">0%</span></label>
+                        <input type="range" id="imgPanY" min="-100" max="100" step="1" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inContent">Article Content (Use double Enter for paragraphs)</label>
+                <textarea id="inContent" style="min-height: 200px;">In a striking vindication of Arcasian liberal economics, the stock markets rallied today, proving once again that deregulation and privatization are the twin engines of prosperity.
 
 Philippe Laurent Beaumont, writing from the Ventrie headquarters, noted that the recent pushback against union militancy has restored investor confidence. "The state has no business in the boardrooms of our great enterprises," Beaumont wrote.
 
 While the Reform Party continues to champion burdensome oversight, the numbers speak for themselves. Dwight Walker's vision of a free and unencumbered market remains the only viable path forward for the Arcasian dream.</textarea>
             </div>
 
-            <div class="export-buttons">
-                <button onclick="exportImage('png')">Export PNG</button>
-                <button onclick="exportImage('jpeg')">Export JPG</button>
+            <div class="form-group" id="quoteGroup" style="display: none;">
+                <label for="inQuote">Quote Box</label>
+                <textarea id="inQuote" style="min-height: 70px;">"We're not just launching a product, we're shaping the future."&#10;— Richard Sanchez</textarea>
             </div>
-            <div id="status" class="status-message"></div>
+
+            <div class="export-actions">
+                <button class="btn-export" onclick="exportPaper('png')">Export PNG</button>
+                <button class="btn-export" onclick="exportPaper('jpg')">Export JPG</button>
+            </div>
         </div>
 
-        <!-- Preview Right -->
+        <!-- Preview Panel -->
         <div class="preview-panel">
-            <div class="newspaper-page" id="printableArea">
-                <div class="masthead">
-                    <svg class="logo-svg" viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Star -->
-                        <path d="M300 10 L308 35 L335 35 L313 52 L322 78 L300 62 L278 78 L287 52 L265 35 L292 35 Z" fill="#d4af37" opacity="0.6"/>
-                        <!-- Text -->
-                        <text x="300" y="65" font-family="Georgia, serif" font-size="42" font-weight="900" fill="#1a2942" text-anchor="middle" letter-spacing="3">L'ÉTOILE ARCASIENNE</text>
-                        <text x="300" y="90" font-family="Georgia, serif" font-size="11" font-style="italic" fill="#333" text-anchor="middle">« Ainsi toujours aux tyrans — et à l’étatisme! »</text>
-                    </svg>
-                </div>
+            <div class="preview-scroll-container">
+                
+                <!-- THE NEWSPAPER (Target for Capture) -->
+                <div id="capture-area" class="layout-historic">
+                    
+                    <!-- Header Area -->
+                    <div class="np-header">
+                        <div class="np-logo-container">
+                            <h1 class="np-logo">L'Étoile<span class="star">★</span>Arcasienne</h1>
+                            <p class="np-motto">« Ainsi toujours aux tyrans — et à l'étatisme! »</p>
+                        </div>
+                        <hr class="np-divider-thick">
+                        <div class="np-info-row">
+                            <span id="outLocation">VENTRIE, ÎLE-DE-VENTRIE</span>
+                            <span id="outDate">THURSDAY, AUGUST 12, 1976</span>
+                            <span id="outPrice">PRICE: 2 ARCASIAN FRANCS</span>
+                        </div>
+                        <hr class="np-divider-thin">
+                    </div>
 
-                <div class="meta-info">
-                    <span id="displayLocation">VENTRIE, ÎLE-DE-VENTRIE</span>
-                    <span id="displayDate">THURSDAY, AUGUST 12, 1976</span>
-                    <span>PRICE: 2 ARCASIAN FRANCS</span>
-                </div>
+                    <!-- Unified Body Content (Rearranged via CSS Layouts) -->
+                    <div class="np-main">
+                        <div class="np-headline-group">
+                            <h2 class="np-headline" id="outHeadline">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</h2>
+                            <div class="np-subheadline-bar" id="outSubheadline">A NEW ERA OF SMART LIVING STARTS HERE</div>
+                        </div>
 
-                <h2 class="headline" id="displayHeadline">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</h2>
+                        <div class="np-layout-columns">
+                            <!-- Image Block -->
+                            <div class="np-col-image">
+                                <div class="np-image-container">
+                                    <div class="np-image-wrapper">
+                                        <img id="outImage" class="np-image grayscale" src="" style="display:none;">
+                                        <div class="np-image-placeholder" id="placeholder">Insert Photograph</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Text Block -->
+                            <div class="np-col-text">
+                                <div class="np-content" id="outContent"></div>
+                                <div class="np-quote-box" id="outQuote"></div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="photo-container" id="photoBox" style="display:none;">
-                    <img id="displayImage" src="" alt="Article Photo">
-                </div>
-
-                <div class="article-body" id="displayBody">
-                    <!-- Dynamic content -->
                 </div>
             </div>
         </div>
+
     </div>
 
     <footer>
-        © 2026. All rights to the Suzerain universe owned by Torpor Games. Fan-made Generator by TaPingvinLahkoLeti.
+        © 2026. Inspired by the Suzerain universe by Torpor Games. This is a fan-made newspaper generator. All rights to Suzerain belong to Torpor Games. Created with Arcasian Liberal Spirit.
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <div id="status-toast">Exporting successfully...</div>
+
     <script>
+        // --- State and DOM Elements ---
+        const captureArea = document.getElementById('capture-area');
+        const templateSelect = document.getElementById('templateSelect');
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadText = document.getElementById('uploadText');
+        const outImage = document.getElementById('outImage');
+        const placeholder = document.getElementById('placeholder');
+        
+        // Adjustment Elements
+        const zoomSlider = document.getElementById('imgZoom');
+        const panXSlider = document.getElementById('imgPanX');
+        const panYSlider = document.getElementById('imgPanY');
+        
+        let currentImageSrc = null;
+        let currentFilter = 'grayscale';
+
+        // --- Live Update Function ---
         function updatePreview() {
-            const headline = document.getElementById('headlineInput').value;
-            const body = document.getElementById('bodyInput').value;
-            const rawDate = document.getElementById('dateInput').value;
+            const template = templateSelect.value;
+            captureArea.className = template; 
 
-            // Update Headline
-            document.getElementById('displayHeadline').innerText = headline.toUpperCase();
+            // Toggle Editor Fields based on template
+            document.getElementById('subheadlineGroup').style.display = 
+                (template === 'layout-launch' || template === 'layout-feature') ? 'block' : 'none';
+            document.getElementById('quoteGroup').style.display = 
+                (template === 'layout-launch') ? 'block' : 'none';
 
-            // Update Date
-            if (rawDate) {
-                const dateObj = new Date(rawDate);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                document.getElementById('displayDate').innerText = dateObj.toLocaleDateString('en-US', options).toUpperCase();
+            // Update Text Elements
+            document.getElementById('outLocation').innerText = document.getElementById('inLocation').value;
+            document.getElementById('outDate').innerText = document.getElementById('inDate').value;
+            document.getElementById('outPrice').innerText = document.getElementById('inPrice').value;
+            
+            // Headline format (newlines to br)
+            const headlineText = document.getElementById('inHeadline').value;
+            document.getElementById('outHeadline').innerHTML = headlineText.replace(/\n/g, '<br>');
+
+            document.getElementById('outSubheadline').innerText = document.getElementById('inSubheadline').value;
+            
+            // Format Content
+            const rawContent = document.getElementById('inContent').value;
+            const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
+            document.getElementById('outContent').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+            
+            // Format Quote
+            const quoteText = document.getElementById('inQuote').value;
+            document.getElementById('outQuote').innerHTML = quoteText.replace(/\n/g, '<br>');
+
+            // Image Source & Filter
+            if (currentImageSrc) {
+                outImage.src = currentImageSrc;
+                outImage.style.display = 'block';
+                placeholder.style.display = 'none';
+                outImage.className = `np-image ${currentFilter}`;
             }
 
-            // Update Body Text
-            const paragraphs = body.split('\n\n').filter(p => p.trim() !== "");
-            const htmlBody = paragraphs.map(p => `<p>${p}</p>`).join('');
-            document.getElementById('displayBody').innerHTML = htmlBody;
+            // Always update image transforms (zoom/pan)
+            applyImageTransform();
         }
 
-        // Image Handling
-        document.getElementById('imageInput').addEventListener('change', function(e) {
+        function applyImageTransform() {
+            if(!currentImageSrc) return;
+            const zoom = zoomSlider.value;
+            const panX = panXSlider.value;
+            const panY = panYSlider.value;
+            
+            // Update labels
+            document.getElementById('valZoom').innerText = parseFloat(zoom).toFixed(2) + 'x';
+            document.getElementById('valPanX').innerText = panX + '%';
+            document.getElementById('valPanY').innerText = panY + '%';
+            
+            // Apply CSS transform
+            outImage.style.transform = `scale(${zoom}) translate(${panX}%, ${panY}%)`;
+        }
+
+        // --- Event Listeners for Live Typing & Sliders ---
+        const inputs = ['inLocation', 'inDate', 'inPrice', 'inHeadline', 'inSubheadline', 'inContent', 'inQuote', 'templateSelect'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        [zoomSlider, panXSlider, panYSlider].forEach(slider => {
+            slider.addEventListener('input', applyImageTransform);
+        });
+
+        // --- Image Upload Handler ---
+        imageUpload.addEventListener('change', function(e) {
             const file = e.target.files[0];
-            const reader = new FileReader();
-            const photoBox = document.getElementById('photoBox');
-            const displayImg = document.getElementById('displayImage');
-
-            reader.onload = function(event) {
-                displayImg.src = event.target.result;
-                photoBox.style.display = 'block';
-            };
-
             if (file) {
+                uploadText.innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    currentImageSrc = event.target.result;
+                    document.getElementById('imageAdjustments').style.display = 'block';
+                    updatePreview();
+                }
                 reader.readAsDataURL(file);
-            } else {
-                photoBox.style.display = 'none';
             }
         });
 
-        // Listen for typing
-        document.getElementById('headlineInput').addEventListener('input', updatePreview);
-        document.getElementById('bodyInput').addEventListener('input', updatePreview);
-        document.getElementById('dateInput').addEventListener('change', updatePreview);
+        // --- Filter Buttons Handler ---
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.filter;
+                updatePreview();
+            });
+        });
 
-        async function exportImage(format) {
-            const status = document.getElementById('status');
-            const element = document.getElementById('printableArea');
+        // --- Responsive Scaling for Preview Area ---
+        function resizePreview() {
+            const container = document.querySelector('.preview-scroll-container');
+            const wrapperWidth = container.clientWidth;
+            const availableWidth = wrapperWidth - 40; 
             
-            status.style.display = 'block';
-            status.style.background = '#e1f5fe';
-            status.style.color = '#01579b';
-            status.innerText = "Processing high-resolution print...";
-
-            try {
-                const canvas = await html2canvas(element, {
-                    scale: 2, // High resolution
-                    useCORS: true,
-                    backgroundColor: "#f4f1ea"
-                });
-
-                const link = document.createElement('a');
-                link.download = `letoile-arcasienne-${Date.now()}.${format === 'jpeg' ? 'jpg' : 'png'}`;
-                link.href = canvas.toDataURL(`image/${format}`, 0.9);
-                link.click();
-
-                status.innerText = "Export Complete!";
-                status.style.background = "#c8e6c9";
-                status.style.color = "#2e7d32";
-            } catch (err) {
-                console.error(err);
-                status.innerText = "Export Failed. Please try a smaller image.";
-                status.style.background = "#ffcdd2";
-                status.style.color = "#c62828";
+            if (availableWidth < 800) {
+                const scale = availableWidth / 800;
+                captureArea.style.transform = `scale(${scale})`;
+                captureArea.style.marginBottom = `-${captureArea.offsetHeight * (1 - scale)}px`;
+            } else {
+                captureArea.style.transform = `scale(1)`;
+                captureArea.style.marginBottom = `0px`;
             }
-            
-            setTimeout(() => status.style.display = 'none', 5000);
         }
 
-        // Run initially
-        window.onload = updatePreview;
+        window.addEventListener('resize', resizePreview);
+
+        // --- Export Functionality ---
+        async function exportPaper(format) {
+            const original = document.getElementById('capture-area');
+            const toast = document.getElementById('status-toast');
+            
+            toast.innerText = "Generating newspaper...";
+            toast.style.background = "#d69e2e";
+            toast.style.display = "block";
+
+            // Clone to render cleanly without CSS transform issues
+            const clone = original.cloneNode(true);
+            
+            clone.style.transform = 'none';
+            clone.style.margin = '0';
+            clone.style.position = 'absolute';
+            clone.style.top = '-9999px';
+            clone.style.left = '-9999px';
+            clone.style.width = '800px';
+            clone.style.height = 'auto'; 
+            
+            document.body.appendChild(clone);
+
+            try {
+                const canvas = await html2canvas(clone, {
+                    scale: 2, // High resolution
+                    useCORS: true,
+                    backgroundColor: '#f4f0e6',
+                    logging: false
+                });
+
+                document.body.removeChild(clone);
+
+                const link = document.createElement('a');
+                const dateStr = new Date().toISOString().split('T')[0];
+                link.download = `LEtoile_Arcasienne_${dateStr}.${format}`;
+                
+                if (format === 'jpg') {
+                    link.href = canvas.toDataURL('image/jpeg', 0.95);
+                } else {
+                    link.href = canvas.toDataURL('image/png');
+                }
+                
+                link.click();
+                
+                toast.innerText = `Successfully exported as ${format.toUpperCase()}!`;
+                toast.style.background = "#10b981";
+                
+                setTimeout(() => toast.style.display = "none", 3000);
+
+            } catch (err) {
+                console.error("Export error:", err);
+                toast.innerText = "An error occurred during export.";
+                toast.style.background = "#ef4444";
+                if(document.body.contains(clone)) document.body.removeChild(clone);
+                setTimeout(() => toast.style.display = "none", 3000);
+            }
+        }
+
+        // Initialize
+        updatePreview();
+        setTimeout(resizePreview, 100);
+
     </script>
 </body>
 </html>
