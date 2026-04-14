@@ -117,7 +117,9 @@
         .form-group { margin-bottom: 18px; }
 
         label {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-family: var(--font-ui);
             font-size: 14px;
             margin-bottom: 6px;
@@ -157,6 +159,13 @@
         .file-upload-wrapper:hover .file-upload-btn { border-color: var(--app-accent); color: var(--app-accent); background: rgba(214, 158, 46, 0.05); }
         .file-upload-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; }
 
+        /* Dynamic Image UI */
+        .image-block-editor { background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #334155; margin-bottom: 15px; }
+        .btn-remove-sm { background: var(--app-danger); color: white; border: none; padding: 3px 8px; border-radius: 3px; font-size: 11px; cursor: pointer; text-transform: uppercase; font-family: var(--font-ui); }
+        .btn-remove-sm:hover { background: var(--app-danger-hover); }
+        .btn-add-image { background: #334155; color: white; padding: 12px; text-align: center; border-radius: 4px; font-family: var(--font-ui); cursor: pointer; width: 100%; border: 1px dashed #64748b; text-transform: uppercase; transition: 0.2s; margin-bottom: 25px; font-size: 14px; }
+        .btn-add-image:hover { background: #475569; border-color: var(--app-accent); color: var(--app-accent); }
+
         /* Image Tools & Sliders */
         .image-tools { display: flex; gap: 8px; margin-top: 10px; margin-bottom: 15px; }
         .btn-filter {
@@ -166,19 +175,13 @@
         }
         .btn-filter:hover { background: #475569; }
         .btn-filter.active { background: var(--app-accent); color: #000; font-weight: bold; }
-        .btn-filter.btn-clear { background: #0f172a; border: 1px solid var(--app-danger); color: var(--app-danger); flex: 0.7; }
-        .btn-filter.btn-clear:hover { background: var(--app-danger); color: white; }
 
-        .slider-group { margin-bottom: 12px; background: #0f172a; padding: 12px; border-radius: 4px; border: 1px solid #334155;}
-        .slider-group label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: #cbd5e1; }
-        .slider-group input[type="range"] {
-            width: 100%; accent-color: var(--app-accent); cursor: pointer;
-        }
-
-        .image-block-divider { border-bottom: 1px dashed #475569; margin: 25px 0; }
+        .slider-group { margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; }
+        .slider-group label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; color: #cbd5e1; border: none; padding: 0; }
+        .slider-group input[type="range"] { width: 100%; accent-color: var(--app-accent); cursor: pointer; }
 
         /* Export */
-        .export-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 25px; }
+        .export-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 25px; border-top: 1px solid #334155; }
         .btn-export {
             flex: 1; padding: 14px; background: var(--app-accent); color: #0f172a;
             border: none; border-radius: 4px; font-family: var(--font-ui);
@@ -254,29 +257,18 @@
         }
 
         /* Image Wrapper with Canva-style Background logic */
-        .np-image-container {
-            border: 2px solid var(--news-text); padding: 3px; background: #fff; position: relative;
-        }
-        .np-image-wrapper {
-            width: 100%; overflow: hidden; position: relative; background: #ddd; display: block;
-        }
+        .np-image-container { border: 2px solid var(--news-text); padding: 3px; background: var(--news-bg); position: relative; }
+        .np-image-wrapper { width: 100%; overflow: hidden; position: relative; background: #ddd; display: block; }
         .np-image {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: 50% 50%;
-            background-repeat: no-repeat;
-            display: block;
-            /* Default filters */
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: 50% 50%; background-repeat: no-repeat; display: block;
             filter: grayscale(100%) contrast(1.15); 
         }
         .np-image.sepia { filter: sepia(0.6) contrast(1.1) brightness(0.9); }
         .np-image.color { filter: contrast(1.05); }
 
         /* Text Engine */
-        .np-content {
-            font-family: var(--font-body); font-size: 15px; line-height: 1.6; text-align: justify;
-        }
+        .np-content { font-family: var(--font-body); font-size: 15px; line-height: 1.6; text-align: justify; }
         .np-content p { margin-bottom: 15px; text-indent: 25px; }
         .np-content p:first-child { text-indent: 0; }
         
@@ -286,10 +278,8 @@
             text-align: center; margin-top: 20px; break-inside: avoid; display: none; margin-bottom: 20px;
         }
 
-        /* Default column layout state */
-        .np-col-image-primary { display: block; }
-        .np-col-image-secondary { display: none; }
-        .np-layout-columns { display: block; }
+        /* Base Structural Rules */
+        .np-col-media-primary:empty, .np-col-media-secondary:empty { display: none !important; }
 
         /* ========================================= */
         /* CSS LAYOUT ENGINE                         */
@@ -299,38 +289,40 @@
         .layout-historic .np-headline-group { order: 1; }
         .layout-historic .np-headline { font-size: 52px; }
         .layout-historic .np-layout-columns { order: 2; display: flex; flex-direction: column; }
-        .layout-historic .np-col-image-primary { margin: 0 auto 25px auto; width: 100%; }
-        .layout-historic .np-col-image-primary .np-image-wrapper { aspect-ratio: 16/10; }
+        .layout-historic .np-col-media-primary { margin: 0 auto 25px auto; width: 100%; }
+        .layout-historic .np-col-media-primary .np-image-wrapper { aspect-ratio: 16/10; }
         .layout-historic .np-content { column-count: 2; column-gap: 35px; }
-        /* Historic Dynamic Fallback */
         .layout-historic.no-primary-image .np-content { column-count: 3; }
 
-        /* 2. Modern Product Launch (Portrait left, optional stacked image) */
+        /* 2. Modern Product Launch (Portrait left, unlimited stacked images) */
         .layout-launch .np-headline-group { order: 1; margin-bottom: 20px; }
         .layout-launch .np-headline { font-size: 65px; letter-spacing: -1px; }
         .layout-launch .np-subheadline-bar { display: block; }
         .layout-launch .np-layout-columns { order: 2; display: grid; grid-template-columns: 42% 1fr; gap: 30px; }
-        .layout-launch .np-col-image-primary { grid-column: 1; grid-row: 1; width: 100%; }
-        .layout-launch .np-col-image-primary .np-image-wrapper { aspect-ratio: 4/5; }
-        .layout-launch .np-col-image-secondary { grid-column: 1; grid-row: 2; display: block; width: 100%; }
-        .layout-launch .np-col-image-secondary .np-image-wrapper { aspect-ratio: 1/1; }
+        
+        .layout-launch .np-col-media-primary { grid-column: 1; grid-row: 1 / 4; display: flex; flex-direction: column; gap: 25px; }
+        .layout-launch .np-col-media-primary .np-image-container:first-child .np-image-wrapper { aspect-ratio: 4/5; }
+        .layout-launch .np-col-media-primary .np-image-container:not(:first-child) .np-image-wrapper { aspect-ratio: 1/1; }
+        
         .layout-launch .np-col-text { grid-column: 2; grid-row: 1 / 4; column-count: 2; column-gap: 25px; }
         .layout-launch .np-quote-box { display: block; }
-        /* Launch Dynamic Fallbacks */
-        .layout-launch.no-primary-image .np-col-image-secondary { grid-row: 1; }
-        .layout-launch.no-primary-image.no-secondary-image .np-col-text { grid-column: 1 / 3; column-count: 3; }
+        
+        .layout-launch.no-primary-image .np-col-text { grid-column: 1 / 3; column-count: 3; }
 
         /* 3. In-depth Report with Sidebar (Wide top, dynamic bottom) */
         .layout-sidebar .np-headline-group { order: 1; margin-bottom: 15px; text-align: left; }
         .layout-sidebar .np-headline { font-size: 52px; text-align: left; line-height: 1.05; }
         .layout-sidebar .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
-        .layout-sidebar .np-col-image-primary { grid-column: 1 / 4; grid-row: 1; margin-bottom: 5px;}
-        .layout-sidebar .np-col-image-primary .np-image-wrapper { aspect-ratio: 21/9; }
+        
+        .layout-sidebar .np-col-media-primary { grid-column: 1 / 4; grid-row: 1; margin-bottom: 5px; }
+        .layout-sidebar .np-col-media-primary .np-image-wrapper { aspect-ratio: 21/9; }
+        
         .layout-sidebar .np-col-text { grid-column: 1 / 3; grid-row: 2; column-count: 2; column-gap: 30px; }
-        .layout-sidebar .np-col-image-secondary { grid-column: 3 / 4; grid-row: 2; display: block; }
-        .layout-sidebar .np-col-image-secondary .np-image-wrapper { aspect-ratio: 3/4; }
+        
+        .layout-sidebar .np-col-media-secondary { grid-column: 3 / 4; grid-row: 2; display: flex; flex-direction: column; gap: 20px; }
+        .layout-sidebar .np-col-media-secondary .np-image-wrapper { aspect-ratio: 3/4; }
         .layout-sidebar .np-quote-box { display: block; }
-        /* Sidebar Dynamic Fallbacks */
+        
         .layout-sidebar.no-secondary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
 
         /* 4. Visual Showcase (Dual Side-by-Side Images) */
@@ -338,73 +330,55 @@
         .layout-gallery .np-headline { font-size: 58px; }
         .layout-gallery .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); padding: 0; font-size: 24px; text-transform: none; font-style: italic; font-weight: 500; border: none; letter-spacing: normal;}
         .layout-gallery .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .layout-gallery .np-col-image-primary { grid-column: 1; }
-        .layout-gallery .np-col-image-primary .np-image-wrapper { aspect-ratio: 4/3; }
-        .layout-gallery .np-col-image-secondary { grid-column: 2; display: block; }
-        .layout-gallery .np-col-image-secondary .np-image-wrapper { aspect-ratio: 4/3; }
+        
+        .layout-gallery .np-col-media-primary { grid-column: 1; }
+        .layout-gallery .np-col-media-primary .np-image-wrapper { aspect-ratio: 4/3; }
+        .layout-gallery .np-col-media-secondary { grid-column: 2; display: flex; flex-direction: column; gap: 20px;}
+        .layout-gallery .np-col-media-secondary .np-image-wrapper { aspect-ratio: 4/3; }
         .layout-gallery .np-col-text { grid-column: 1 / 3; column-count: 3; column-gap: 25px; font-size: 14.5px; margin-top: 10px;}
-        /* Gallery Dynamic Fallbacks */
-        .layout-gallery.no-secondary-image .np-col-image-primary { grid-column: 1 / 3; }
-        .layout-gallery.no-secondary-image .np-col-image-primary .np-image-wrapper { aspect-ratio: 21/9; }
-        .layout-gallery.no-primary-image .np-col-image-secondary { grid-column: 1 / 3; }
-        .layout-gallery.no-primary-image .np-col-image-secondary .np-image-wrapper { aspect-ratio: 21/9; }
-
+        
+        .layout-gallery.no-secondary-image .np-col-media-primary { grid-column: 1 / 3; }
+        .layout-gallery.no-secondary-image .np-col-media-primary .np-image-wrapper { aspect-ratio: 21/9; }
+        .layout-gallery.no-primary-image .np-col-media-secondary { grid-column: 1 / 3; }
+        .layout-gallery.no-primary-image .np-col-media-secondary .np-image-wrapper { aspect-ratio: 21/9; }
 
         /* 5. Feature Story (Single Image) */
-        .layout-feature .np-col-image-primary { order: 1; margin-bottom: 25px; width: 100%; }
-        .layout-feature .np-col-image-primary .np-image-wrapper { aspect-ratio: 2/1; }
+        .layout-feature .np-col-media-primary { order: 1; margin-bottom: 25px; width: 100%; }
+        .layout-feature .np-col-media-primary .np-image-wrapper { aspect-ratio: 2/1; }
         .layout-feature .np-headline-group { order: 2; border-bottom: 2px solid var(--news-text); padding-bottom: 20px; margin-bottom: 20px; }
         .layout-feature .np-headline { font-size: 58px; }
         .layout-feature .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); padding: 0; font-size: 24px; text-transform: none; font-style: italic; font-weight: 500; border: none; letter-spacing: normal;}
         .layout-feature .np-layout-columns { order: 3; display: flex; flex-direction: column; }
         .layout-feature .np-content { column-count: 3; column-gap: 25px; font-size: 14.5px; }
-        /* Feature Dynamic Fallback */
         .layout-feature.no-primary-image .np-content { column-count: 3; }
 
         /* 6. Text-Heavy Economic (Single Image) */
         .layout-textheavy .np-headline-group { order: 1; margin-bottom: 15px; text-align: left; }
         .layout-textheavy .np-headline { font-size: 42px; text-align: left; }
         .layout-textheavy .np-layout-columns { order: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .layout-textheavy .np-col-image-primary { grid-column: 1 / 2; }
-        .layout-textheavy .np-col-image-primary .np-image-wrapper { aspect-ratio: 1/1; }
+        .layout-textheavy .np-col-media-primary { grid-column: 1 / 2; }
+        .layout-textheavy .np-col-media-primary .np-image-wrapper { aspect-ratio: 1/1; }
         .layout-textheavy .np-col-text { grid-column: 2 / 4; }
         .layout-textheavy .np-content { column-count: 2; column-gap: 25px; }
-        /* Text-Heavy Dynamic Fallback */
         .layout-textheavy.no-primary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
 
-        /* 7. Text Only - Two Column Editorial */
-        .layout-text-two-col .np-col-image-primary, .layout-text-two-col .np-col-image-secondary { display: none; }
-        .layout-text-two-col .np-section-category {
-            display: block; text-align: center; font-family: var(--font-headline); font-size: 22px;
-            font-weight: 700; color: var(--news-blue); margin-bottom: 5px;
-        }
+        /* 7 & 8. Text Only Layouts */
+        .layout-text-two-col .np-col-media-primary, .layout-text-two-col .np-col-media-secondary { display: none !important; }
+        .layout-text-two-col .np-section-category { display: block; text-align: center; font-family: var(--font-headline); font-size: 22px; font-weight: 700; color: var(--news-blue); margin-bottom: 5px; }
         .layout-text-two-col .np-headline-group { order: 1; margin-bottom: 15px; text-align: center; }
         .layout-text-two-col .np-headline { font-size: 38px; color: var(--news-blue); line-height: 1.2; text-transform: none; }
-        .layout-text-two-col .np-subheadline-bar {
-            display: block; background: transparent; color: #333; font-family: var(--font-body);
-            font-size: 17px; font-style: normal; text-transform: none; letter-spacing: normal;
-            padding: 0; margin-top: 10px; font-weight: 400;
-        }
-        .layout-text-two-col .np-ornament {
-            display: flex; order: 2; margin: 15px auto 25px auto; width: 85%; align-items: center; color: var(--news-blue);
-        }
+        .layout-text-two-col .np-subheadline-bar { display: block; background: transparent; color: #333; font-family: var(--font-body); font-size: 17px; font-style: normal; text-transform: none; letter-spacing: normal; padding: 0; margin-top: 10px; font-weight: 400; }
+        .layout-text-two-col .np-ornament { display: flex; order: 2; margin: 15px auto 25px auto; width: 85%; align-items: center; color: var(--news-blue); }
         .layout-text-two-col .np-layout-columns { order: 3; display: block; }
         .layout-text-two-col .np-content { column-count: 2; column-gap: 35px; font-size: 15px; }
 
-        /* 8. Text Only - Three Column Bulletin */
-        .layout-text-three-col .np-col-image-primary, .layout-text-three-col .np-col-image-secondary { display: none; }
-        .layout-text-three-col .np-section-category {
-            display: block; font-family: var(--font-headline); font-size: 18px; font-weight: bold;
-            text-transform: uppercase; border-bottom: 2px solid var(--news-text); padding-bottom: 5px; margin-bottom: 15px;
-        }
+        .layout-text-three-col .np-col-media-primary, .layout-text-three-col .np-col-media-secondary { display: none !important; }
+        .layout-text-three-col .np-section-category { display: block; font-family: var(--font-headline); font-size: 18px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid var(--news-text); padding-bottom: 5px; margin-bottom: 15px; }
         .layout-text-three-col .np-headline-group { order: 1; margin-bottom: 20px; text-align: left; }
         .layout-text-three-col .np-headline { font-size: 46px; text-align: left; line-height: 1.1; }
-        .layout-text-three-col .np-subheadline-bar {
-            display: block; background: var(--news-text); color: var(--news-bg); font-size: 16px; padding: 8px; margin-top: 15px;
-        }
+        .layout-text-three-col .np-subheadline-bar { display: block; background: var(--news-text); color: var(--news-bg); font-size: 16px; padding: 8px; margin-top: 15px; }
         .layout-text-three-col .np-layout-columns { order: 3; display: block; }
         .layout-text-three-col .np-content { column-count: 3; column-gap: 25px; font-size: 14.5px; }
-
 
         /* Status Toast */
         #status-toast {
@@ -436,18 +410,18 @@
     <div class="main-container">
         
         <!-- Editor Panel -->
-        <div class="editor-panel">
+        <div class="editor-panel" id="editorPanel">
             <h2 class="editor-title">Editorial Desk</h2>
 
             <div class="form-group">
                 <label for="templateSelect">Newspaper Layout</label>
                 <select id="templateSelect">
-                    <option value="layout-sidebar">In-depth Report with Sidebar (Wide Top, Optional Side)</option>
-                    <option value="layout-launch">Modern Product Launch (Portrait Left, Optional Side)</option>
+                    <option value="layout-launch">Modern Product Launch (Portrait Left, Stackable Images)</option>
+                    <option value="layout-sidebar">In-depth Report with Sidebar (Wide Top, Stackable Side)</option>
                     <option value="layout-gallery">Visual Showcase (Dual Top Images)</option>
-                    <option value="layout-historic">1976 Historic Frontpage (Single Image)</option>
-                    <option value="layout-feature">Full-Width Feature Story (Single Image)</option>
-                    <option value="layout-textheavy">Three-Column Economic Report (Single Image)</option>
+                    <option value="layout-historic">1976 Historic Frontpage (Single Top Image)</option>
+                    <option value="layout-feature">Full-Width Feature Story (Single Banner Image)</option>
+                    <option value="layout-textheavy">Three-Column Economic Report (Single Corner Image)</option>
                     <option value="layout-text-two-col">Text Only - Editorial (Two Column)</option>
                     <option value="layout-text-three-col">Text Only - Bulletin (Three Column)</option>
                 </select>
@@ -475,90 +449,38 @@
 
             <div class="form-group">
                 <label for="inHeadline">Headline</label>
-                <textarea id="inHeadline" style="min-height: 70px;">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</textarea>
+                <textarea id="inHeadline" style="min-height: 70px;">SOUTHERN COLLAPSE IN JINKAN</textarea>
             </div>
 
             <div class="form-group" id="subheadlineGroup" style="display: none;">
                 <label for="inSubheadline">Subheadline / Highlight</label>
-                <input type="text" id="inSubheadline" value="A NEW ERA OF SMART LIVING STARTS HERE">
+                <input type="text" id="inSubheadline" value="REFORM WEAKNESS TURNS VICTORY INTO DISASTER">
             </div>
 
-            <!-- PRIMARY IMAGE UPLOAD -->
-            <div class="form-group" id="imageUploadGroup1">
-                <label>Primary Photograph (Optional)</label>
-                <div class="file-upload-wrapper">
-                    <div class="file-upload-btn" id="uploadText1">Choose Image File...</div>
-                    <input type="file" id="imageUpload1" accept="image/*">
+            <!-- DYNAMIC IMAGES SECTION -->
+            <div id="dynamic-images-wrapper">
+                <div id="dynamic-images-container">
+                    <!-- Javascript generates image editors here -->
                 </div>
-                
-                <div class="image-tools" id="filterTools1">
-                    <button class="btn-filter active" data-filter="grayscale">B&W</button>
-                    <button class="btn-filter" data-filter="sepia">Sepia</button>
-                    <button class="btn-filter" data-filter="color">Color</button>
-                    <button class="btn-filter btn-clear" id="btnRemove1">Clear</button>
-                </div>
-
-                <div id="imageAdjustments1" style="display: none;">
-                    <div class="slider-group">
-                        <label><span>Zoom</span> <span id="valZoom1">1.0x</span></label>
-                        <input type="range" id="imgZoom1" min="1" max="3" step="0.05" value="1">
-                    </div>
-                    <div class="slider-group">
-                        <label><span>Horizontal Pan</span> <span id="valPanX1">50%</span></label>
-                        <input type="range" id="imgPanX1" min="0" max="100" step="1" value="50">
-                    </div>
-                    <div class="slider-group">
-                        <label><span>Vertical Pan</span> <span id="valPanY1">50%</span></label>
-                        <input type="range" id="imgPanY1" min="0" max="100" step="1" value="50">
-                    </div>
-                </div>
-            </div>
-
-            <div id="imageDivider" class="image-block-divider" style="display: none;"></div>
-
-            <!-- SECONDARY IMAGE UPLOAD (OPTIONAL) -->
-            <div class="form-group" id="imageUploadGroup2" style="display: none;">
-                <label>Secondary Photograph (Optional)</label>
-                <div class="file-upload-wrapper">
-                    <div class="file-upload-btn" id="uploadText2">Choose Image File...</div>
-                    <input type="file" id="imageUpload2" accept="image/*">
-                </div>
-                
-                <div class="image-tools" id="filterTools2">
-                    <button class="btn-filter active" data-filter="grayscale">B&W</button>
-                    <button class="btn-filter" data-filter="sepia">Sepia</button>
-                    <button class="btn-filter" data-filter="color">Color</button>
-                    <button class="btn-filter btn-clear" id="btnRemove2">Clear</button>
-                </div>
-
-                <div id="imageAdjustments2" style="display: none;">
-                    <div class="slider-group">
-                        <label><span>Zoom</span> <span id="valZoom2">1.0x</span></label>
-                        <input type="range" id="imgZoom2" min="1" max="3" step="0.05" value="1">
-                    </div>
-                    <div class="slider-group">
-                        <label><span>Horizontal Pan</span> <span id="valPanX2">50%</span></label>
-                        <input type="range" id="imgPanX2" min="0" max="100" step="1" value="50">
-                    </div>
-                    <div class="slider-group">
-                        <label><span>Vertical Pan</span> <span id="valPanY2">50%</span></label>
-                        <input type="range" id="imgPanY2" min="0" max="100" step="1" value="50">
-                    </div>
-                </div>
+                <button class="btn-add-image" onclick="addImageSlot()">+ Add Photograph</button>
             </div>
 
             <div class="form-group">
                 <label for="inContent">Article Content (Use double Enter for paragraphs)</label>
-                <textarea id="inContent" style="min-height: 200px;">In a striking vindication of Arcasian liberal economics, the stock markets rallied today, proving once again that deregulation and privatization are the twin engines of prosperity.
+                <textarea id="inContent" style="min-height: 300px;">In a damning contrast that exposes the new Reform government's dangerous weakness, Arcasian forces are achieving sweeping victories in northern Jinkan while the southern front teeters on the edge of total collapse.
 
-Philippe Laurent Beaumont, writing from the Ventrie headquarters, noted that the recent pushback against union militancy has restored investor confidence. "The state has no business in the boardrooms of our great enterprises," Beaumont wrote.
+Military sources confirm that in the northern Temple Plains, our mechanized troops and air superiority have delivered decisive gains: large revolutionary forces have been encircled, key border cities captured, and enemy supply lines severed with relatively low casualties. Morale among northern troops is rising.
 
-While the Reform Party continues to champion burdensome oversight, the numbers speak for themselves. Dwight Walker's vision of a free and unencumbered market remains the only viable path forward for the Arcasian dream.</textarea>
+In the south, however, the situation is rapidly deteriorating. Revolutionary forces have outflanked our lines, encircled critical western and southern port cities, and are strangling supply routes. Strategic territory is being lost daily, and the risk of a full southern collapse grows by the hour.
+
+Philippe Laurent Beaumont, speaking forcefully for the Democratic Concord, did not mince words: "Our troops are winning in the north while Reform dithers in the south. This is what happens when radicals run the government and union militants dictate policy at home."
+
+The Democratic Concord stands ready to fight for Arcasia: back our troops, defend the PMCs who protect them, restore real law and order at home, and finish the job in Jinkan with honor, not weakness.</textarea>
             </div>
 
             <div class="form-group" id="quoteGroup" style="display: none;">
                 <label for="inQuote">Quote Box</label>
-                <textarea id="inQuote" style="min-height: 70px;">"We're not just launching a product, we're shaping the future."&#10;— Richard Sanchez</textarea>
+                <textarea id="inQuote" style="min-height: 70px;">"Our troops are winning in the north while Reform dithers in the south. This is what happens when radicals run the government."&#10;— Philippe Laurent Beaumont</textarea>
             </div>
 
             <div class="export-actions">
@@ -572,7 +494,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             <div class="preview-scroll-container">
                 
                 <!-- THE NEWSPAPER (Target for Capture) -->
-                <div id="capture-area" class="layout-sidebar">
+                <div id="capture-area" class="layout-launch">
                     
                     <!-- Header Area -->
                     <div class="np-header">
@@ -589,13 +511,13 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
                         <hr class="np-divider-thin">
                     </div>
 
-                    <!-- Unified Body Content (Rearranged via CSS Layouts) -->
+                    <!-- Unified Body Content -->
                     <div class="np-main">
                         <div class="np-section-category" id="outCategory">Domestic — Arcasia</div>
                         
                         <div class="np-headline-group">
-                            <h2 class="np-headline" id="outHeadline">WALKER'S LEGACY VINDICATED AS MARKETS SURGE</h2>
-                            <div class="np-subheadline-bar" id="outSubheadline">A NEW ERA OF SMART LIVING STARTS HERE</div>
+                            <h2 class="np-headline" id="outHeadline">SOUTHERN COLLAPSE IN JINKAN</h2>
+                            <div class="np-subheadline-bar" id="outSubheadline">REFORM WEAKNESS TURNS VICTORY INTO DISASTER</div>
                         </div>
 
                         <div class="np-ornament">
@@ -608,25 +530,9 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
 
                         <div class="np-layout-columns">
                             
-                            <!-- Primary Image Block -->
-                            <div class="np-col-image-primary">
-                                <div class="np-image-container">
-                                    <div class="np-image-wrapper">
-                                        <div id="outImage1" class="np-image grayscale" style="display:none;"></div>
-                                        <!-- Placeholder hidden by logic if empty -->
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Secondary Image Block -->
-                            <div class="np-col-image-secondary">
-                                <div class="np-image-container">
-                                    <div class="np-image-wrapper">
-                                        <div id="outImage2" class="np-image grayscale" style="display:none;"></div>
-                                        <!-- Placeholder hidden by logic if empty -->
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Dynamic Media Columns -->
+                            <div class="np-col-media-primary" id="slot-primary"></div>
+                            <div class="np-col-media-secondary" id="slot-secondary"></div>
 
                             <!-- Text Block -->
                             <div class="np-col-text">
@@ -650,22 +556,148 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
     <div id="status-toast">Exporting successfully...</div>
 
     <script>
-        // --- State and DOM Elements ---
+        // --- DOM Elements & State Management ---
         const captureArea = document.getElementById('capture-area');
-        const templateSelect = document.getElementById('templateSelect');
+        let imagesData = [];
         
-        // Image States
-        const imgState = {
-            '1': { src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 },
-            '2': { src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 }
-        };
+        // Generate simple ID
+        const generateId = () => Math.random().toString(36).substr(2, 9);
 
-        // --- Live Update Function ---
+        // Compress image before storage to prevent LocalStorage limits (5MB)
+        function resizeAndCompressImage(dataUrl, callback) {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxDim = 1200; // Safe resolution
+                let width = img.width;
+                let height = img.height;
+                if (width > maxDim || height > maxDim) {
+                    if (width > height) { height = Math.round((height * maxDim) / width); width = maxDim; } 
+                    else { width = Math.round((width * maxDim) / height); height = maxDim; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL('image/jpeg', 0.85)); 
+            };
+            img.src = dataUrl;
+        }
+
+        // --- Editor UI Generation ---
+        function renderImageEditorUI() {
+            const container = document.getElementById('dynamic-images-container');
+            container.innerHTML = '';
+            
+            imagesData.forEach((img, index) => {
+                container.innerHTML += `
+                <div class="image-block-editor" id="editor-img-${img.id}">
+                    <label>Photograph ${index + 1} 
+                        <button class="btn-remove-sm" onclick="removeImage('${img.id}')">Remove</button>
+                    </label>
+                    <div class="file-upload-wrapper" style="margin-bottom:10px;">
+                        <div class="file-upload-btn" id="uploadText-${img.id}">
+                            ${img.src ? 'Image Loaded (Click to Change)' : 'Choose Image File...'}
+                        </div>
+                        <input type="file" accept="image/*" onchange="handleImageUpload(event, '${img.id}')">
+                    </div>
+                    
+                    <div class="image-tools">
+                        <button class="btn-filter ${img.filter === 'grayscale' ? 'active' : ''}" onclick="setFilter('${img.id}', 'grayscale')">B&W</button>
+                        <button class="btn-filter ${img.filter === 'sepia' ? 'active' : ''}" onclick="setFilter('${img.id}', 'sepia')">Sepia</button>
+                        <button class="btn-filter ${img.filter === 'color' ? 'active' : ''}" onclick="setFilter('${img.id}', 'color')">Color</button>
+                    </div>
+
+                    <div style="display: ${img.src ? 'block' : 'none'};">
+                        <div class="slider-group">
+                            <label><span>Zoom</span> <span>${parseFloat(img.zoom).toFixed(2)}x</span></label>
+                            <input type="range" min="1" max="3" step="0.05" value="${img.zoom}" oninput="updateImageParam('${img.id}', 'zoom', this.value)">
+                        </div>
+                        <div class="slider-group">
+                            <label><span>Horizontal Pan</span> <span>${img.panX}%</span></label>
+                            <input type="range" min="0" max="100" step="1" value="${img.panX}" oninput="updateImageParam('${img.id}', 'panX', this.value)">
+                        </div>
+                        <div class="slider-group">
+                            <label><span>Vertical Pan</span> <span>${img.panY}%</span></label>
+                            <input type="range" min="0" max="100" step="1" value="${img.panY}" oninput="updateImageParam('${img.id}', 'panY', this.value)">
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+
+        // --- Interaction Functions ---
+        function addImageSlot() {
+            imagesData.push({ id: generateId(), src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 });
+            renderImageEditorUI();
+            updatePreview();
+            saveState();
+        }
+
+        function removeImage(id) {
+            imagesData = imagesData.filter(img => img.id !== id);
+            renderImageEditorUI();
+            updatePreview();
+            saveState();
+        }
+
+        function handleImageUpload(e, id) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    resizeAndCompressImage(event.target.result, function(compressedDataUrl) {
+                        const img = imagesData.find(i => i.id === id);
+                        if (img) img.src = compressedDataUrl;
+                        renderImageEditorUI();
+                        updatePreview();
+                        saveState();
+                    });
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setFilter(id, filter) {
+            const img = imagesData.find(i => i.id === id);
+            if (img) img.filter = filter;
+            renderImageEditorUI();
+            updatePreview();
+            saveState();
+        }
+
+        function updateImageParam(id, param, value) {
+            const img = imagesData.find(i => i.id === id);
+            if (img) img[param] = value;
+            // Immediate UI update for the slider text via parent traversal
+            event.target.previousElementSibling.lastElementChild.innerText = param === 'zoom' ? parseFloat(value).toFixed(2) + 'x' : value + '%';
+            updatePreview();
+            saveState(); // Debouncing is ideal but this is safe enough for small state
+        }
+
+        // Generate Preview HTML for an image
+        function getPreviewImageHTML(img) {
+            if (!img.src) return '';
+            return `
+            <div class="np-image-container">
+                <div class="np-image-wrapper">
+                    <div class="np-image ${img.filter}" style="background-image: url('${img.src}'); background-position: ${img.panX}% ${img.panY}%; transform: scale(${img.zoom}); transform-origin: ${img.panX}% ${img.panY}%;"></div>
+                </div>
+            </div>`;
+        }
+
+
+        // --- Live Update Core Function ---
         function updatePreview() {
+            const templateSelect = document.getElementById('templateSelect');
             const template = templateSelect.value;
-            captureArea.className = template; 
+            
+            // Apply layout wrapper class safely since captureArea is globally defined
+            if(captureArea) {
+                captureArea.className = template; 
+            }
 
-            // Toggle Editor Fields based on template layout requirements
+            // Toggle Editor Fields based on template
             const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col', 'layout-gallery', 'layout-sidebar'].includes(template);
             document.getElementById('subheadlineGroup').style.display = needsSubheadline ? 'block' : 'none';
 
@@ -676,140 +708,121 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             document.getElementById('categoryGroup').style.display = needsCategory ? 'block' : 'none';
 
             const isTextOnly = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
-            document.getElementById('imageUploadGroup1').style.display = isTextOnly ? 'none' : 'block';
+            document.getElementById('dynamic-images-wrapper').style.display = isTextOnly ? 'none' : 'block';
 
-            const needsSecondImage = ['layout-launch', 'layout-gallery', 'layout-sidebar'].includes(template);
-            document.getElementById('imageUploadGroup2').style.display = needsSecondImage ? 'block' : 'none';
-            document.getElementById('imageDivider').style.display = needsSecondImage ? 'block' : 'none';
-
-            // OPTIONALITY LOGIC: Hide primary image column entirely if no image is loaded
-            if (!imgState['1'].src || isTextOnly) {
-                document.querySelector('.np-col-image-primary').style.display = 'none';
-                captureArea.classList.add('no-primary-image');
-            } else {
-                document.querySelector('.np-col-image-primary').style.display = 'block';
-                captureArea.classList.remove('no-primary-image');
-            }
-
-            // OPTIONALITY LOGIC: Hide secondary image column entirely if no image is loaded
-            if (!imgState['2'].src || !needsSecondImage || isTextOnly) {
-                document.querySelector('.np-col-image-secondary').style.display = 'none';
-                captureArea.classList.add('no-secondary-image');
-            } else {
-                document.querySelector('.np-col-image-secondary').style.display = 'block';
-                captureArea.classList.remove('no-secondary-image');
-            }
-
-            // Update Text Elements
+            // Text Updates
             document.getElementById('outCategory').innerText = document.getElementById('inCategory').value;
             document.getElementById('outLocation').innerText = document.getElementById('inLocation').value;
             document.getElementById('outDate').innerText = document.getElementById('inDate').value;
             document.getElementById('outPrice').innerText = document.getElementById('inPrice').value;
             
-            // Headline format (newlines to br)
             const headlineText = document.getElementById('inHeadline').value;
             document.getElementById('outHeadline').innerHTML = headlineText.replace(/\n/g, '<br>');
 
             document.getElementById('outSubheadline').innerText = document.getElementById('inSubheadline').value;
             
-            // Format Content
             const rawContent = document.getElementById('inContent').value;
             const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
             document.getElementById('outContent').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
             
-            // Format Quote
             const quoteText = document.getElementById('inQuote').value;
             document.getElementById('outQuote').innerHTML = quoteText.replace(/\n/g, '<br>');
 
-            // Image Render
-            ['1', '2'].forEach(id => {
-                const outImage = document.getElementById('outImage' + id);
-                if (imgState[id].src) {
-                    outImage.style.backgroundImage = `url("${imgState[id].src}")`;
-                    outImage.style.display = 'block';
-                    outImage.className = `np-image ${imgState[id].filter}`;
-                } else {
-                    outImage.style.display = 'none';
-                }
-                applyImageTransform(id);
-            });
+            // Image Render & Layout Fallbacks
+            const slotPrimary = document.getElementById('slot-primary');
+            const slotSecondary = document.getElementById('slot-secondary');
+            slotPrimary.innerHTML = '';
+            slotSecondary.innerHTML = '';
+
+            const validImages = imagesData.filter(img => img.src !== null);
+
+            // Wipe classes
+            if(captureArea) {
+                captureArea.classList.remove('no-primary-image', 'no-secondary-image');
+            }
+
+            if (isTextOnly) {
+                captureArea.classList.add('no-primary-image', 'no-secondary-image');
+            } else if (template === 'layout-launch') {
+                validImages.forEach(img => slotPrimary.innerHTML += getPreviewImageHTML(img));
+                if (validImages.length === 0) captureArea.classList.add('no-primary-image');
+                captureArea.classList.add('no-secondary-image'); // Launch doesn't use slot 2 natively, they stack in slot 1
+            } else if (template === 'layout-sidebar') {
+                if (validImages[0]) slotPrimary.innerHTML = getPreviewImageHTML(validImages[0]);
+                else captureArea.classList.add('no-primary-image');
+                
+                const sideImages = validImages.slice(1);
+                if (sideImages.length > 0) sideImages.forEach(img => slotSecondary.innerHTML += getPreviewImageHTML(img));
+                else captureArea.classList.add('no-secondary-image');
+            } else if (template === 'layout-gallery') {
+                if (validImages[0]) slotPrimary.innerHTML = getPreviewImageHTML(validImages[0]);
+                else captureArea.classList.add('no-primary-image');
+                if (validImages[1]) slotSecondary.innerHTML = getPreviewImageHTML(validImages[1]);
+                else captureArea.classList.add('no-secondary-image');
+            } else {
+                // Single image layouts (historic, feature, textheavy)
+                if (validImages[0]) slotPrimary.innerHTML = getPreviewImageHTML(validImages[0]);
+                else captureArea.classList.add('no-primary-image');
+                captureArea.classList.add('no-secondary-image');
+            }
         }
 
-        function applyImageTransform(id) {
-            if(!imgState[id].src) return;
-            const state = imgState[id];
-            const outImage = document.getElementById('outImage' + id);
-            
-            document.getElementById('valZoom' + id).innerText = parseFloat(state.zoom).toFixed(2) + 'x';
-            document.getElementById('valPanX' + id).innerText = state.panX + '%';
-            document.getElementById('valPanY' + id).innerText = state.panY + '%';
-            
-            outImage.style.backgroundPosition = `${state.panX}% ${state.panY}%`;
-            outImage.style.transformOrigin = `${state.panX}% ${state.panY}%`;
-            outImage.style.transform = `scale(${state.zoom})`;
+
+        // --- Local Storage Persistence ---
+        function saveState() {
+            const state = {
+                template: document.getElementById('templateSelect').value,
+                category: document.getElementById('inCategory').value,
+                location: document.getElementById('inLocation').value,
+                date: document.getElementById('inDate').value,
+                price: document.getElementById('inPrice').value,
+                headline: document.getElementById('inHeadline').value,
+                subheadline: document.getElementById('inSubheadline').value,
+                content: document.getElementById('inContent').value,
+                quote: document.getElementById('inQuote').value,
+                images: imagesData
+            };
+            try {
+                localStorage.setItem('letoile_generator_state', JSON.stringify(state));
+            } catch (e) { console.warn('Could not save to localStorage (quota exceeded or disabled).'); }
         }
 
-        // --- Setup Handlers for Multiple Images ---
-        function setupImageHandlers(idSuffix) {
-            const upload = document.getElementById('imageUpload' + idSuffix);
-            const text = document.getElementById('uploadText' + idSuffix);
-            const adjust = document.getElementById('imageAdjustments' + idSuffix);
-            const zoom = document.getElementById('imgZoom' + idSuffix);
-            const panX = document.getElementById('imgPanX' + idSuffix);
-            const panY = document.getElementById('imgPanY' + idSuffix);
-            const filters = document.querySelectorAll(`#filterTools${idSuffix} .btn-filter:not(.btn-clear)`);
-            const btnRemove = document.getElementById('btnRemove' + idSuffix);
-
-            upload.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    text.innerText = file.name;
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        imgState[idSuffix].src = event.target.result;
-                        adjust.style.display = 'block';
-                        updatePreview();
+        function loadState() {
+            const saved = localStorage.getItem('letoile_generator_state');
+            if (saved) {
+                try {
+                    const state = JSON.parse(saved);
+                    document.getElementById('templateSelect').value = state.template || 'layout-launch';
+                    document.getElementById('inCategory').value = state.category || '';
+                    document.getElementById('inLocation').value = state.location || '';
+                    document.getElementById('inDate').value = state.date || '';
+                    document.getElementById('inPrice').value = state.price || '';
+                    document.getElementById('inHeadline').value = state.headline || '';
+                    document.getElementById('inSubheadline').value = state.subheadline || '';
+                    document.getElementById('inContent').value = state.content || '';
+                    document.getElementById('inQuote').value = state.quote || '';
+                    
+                    if (state.images && Array.isArray(state.images)) {
+                        imagesData = state.images;
                     }
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            btnRemove.addEventListener('click', () => {
-                imgState[idSuffix].src = null;
-                upload.value = "";
-                text.innerText = "Choose Image File...";
-                adjust.style.display = 'none';
-                updatePreview();
-            });
-
-            [zoom, panX, panY].forEach(slider => {
-                slider.addEventListener('input', () => {
-                    imgState[idSuffix].zoom = zoom.value;
-                    imgState[idSuffix].panX = panX.value;
-                    imgState[idSuffix].panY = panY.value;
-                    applyImageTransform(idSuffix);
-                });
-            });
-
-            filters.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    filters.forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    imgState[idSuffix].filter = e.target.dataset.filter;
-                    updatePreview();
-                });
-            });
+                } catch(e) { console.error('Failed to parse saved state.'); }
+            }
+            
+            // Ensure at least one image slot exists on first load
+            if (imagesData.length === 0) {
+                imagesData.push({ id: generateId(), src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 });
+            }
+            
+            renderImageEditorUI();
+            updatePreview();
         }
 
-        // Initialize Dual Images
-        setupImageHandlers('1');
-        setupImageHandlers('2');
-
-        // --- Event Listeners for Live Typing ---
-        const inputs = ['inLocation', 'inDate', 'inPrice', 'inHeadline', 'inSubheadline', 'inContent', 'inQuote', 'inCategory', 'templateSelect'];
-        inputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', updatePreview);
+        // Setup global listener to save automatically
+        document.getElementById('editorPanel').addEventListener('input', () => {
+            updatePreview();
+            saveState();
         });
+
 
         // --- Responsive Scaling for Preview Area ---
         function resizePreview() {
@@ -819,15 +832,19 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             
             if (availableWidth < 800) {
                 const scale = availableWidth / 800;
-                captureArea.style.transform = `scale(${scale})`;
-                captureArea.style.marginBottom = `-${captureArea.offsetHeight * (1 - scale)}px`;
+                if(captureArea) {
+                    captureArea.style.transform = `scale(${scale})`;
+                    captureArea.style.marginBottom = `-${captureArea.offsetHeight * (1 - scale)}px`;
+                }
             } else {
-                captureArea.style.transform = `scale(1)`;
-                captureArea.style.marginBottom = `0px`;
+                if(captureArea) {
+                    captureArea.style.transform = `scale(1)`;
+                    captureArea.style.marginBottom = `0px`;
+                }
             }
         }
-
         window.addEventListener('resize', resizePreview);
+
 
         // --- Export Functionality ---
         async function exportPaper(format) {
@@ -840,7 +857,6 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
 
             // Clone to render cleanly without CSS transform issues
             const clone = original.cloneNode(true);
-            
             clone.style.transform = 'none';
             clone.style.margin = '0';
             clone.style.position = 'absolute';
@@ -848,7 +864,6 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             clone.style.left = '-9999px';
             clone.style.width = '800px';
             clone.style.height = 'auto'; 
-            
             document.body.appendChild(clone);
 
             try {
@@ -875,7 +890,6 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
                 
                 toast.innerText = `Successfully exported as ${format.toUpperCase()}!`;
                 toast.style.background = "#10b981";
-                
                 setTimeout(() => toast.style.display = "none", 3000);
 
             } catch (err) {
@@ -887,8 +901,8 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             }
         }
 
-        // Initialize App
-        updatePreview();
+        // Boot Application
+        loadState();
         setTimeout(resizePreview, 100);
 
     </script>
