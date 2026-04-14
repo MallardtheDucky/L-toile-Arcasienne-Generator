@@ -6,7 +6,7 @@
     
     <!-- GitHub / Open Graph Meta Tags -->
     <title>L'Étoile Arcasienne | Newspaper Generator</title>
-    <meta name="description" content="Generate articles, adjust images, and export in high quality.">
+    <meta name="description" content="Create custom, authentic-looking Arcasian newspaper front pages from the Suzerain universe. Generate articles, adjust images, and export in high quality.">
     <meta property="og:title" content="L'Étoile Arcasienne - Official Newspaper Generator">
     <meta property="og:description" content="Publish your own news from Ventrie. Create, edit, and download high-quality Arcasian newspaper covers.">
     <meta property="og:type" content="website">
@@ -26,6 +26,9 @@
             --app-panel: #1e293b;
             --app-text: #e2e8f0;
             --app-accent: #d69e2e; 
+            --app-accent-hover: #ecc94b;
+            --app-danger: #ef4444;
+            --app-danger-hover: #dc2626;
             
             --news-bg: #f4f0e6; 
             --news-text: #171717;
@@ -82,15 +85,18 @@
             background: var(--app-panel);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             overflow-y: auto;
             height: calc(100vh - 120px);
             border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
         }
         
         .editor-panel::-webkit-scrollbar { width: 8px; }
-        .editor-panel::-webkit-scrollbar-track { background: #0f172a; }
+        .editor-panel::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
         .editor-panel::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .editor-panel::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
         .editor-title {
             font-family: var(--font-ui);
@@ -101,6 +107,11 @@
             color: var(--app-accent);
             border-bottom: 1px solid #334155;
             padding-bottom: 10px;
+            position: sticky;
+            top: -25px;
+            background: var(--app-panel);
+            z-index: 10;
+            padding-top: 25px;
         }
 
         .form-group { margin-bottom: 18px; }
@@ -124,12 +135,13 @@
             color: #fff;
             font-family: var(--font-body);
             font-size: 15px;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         input[type="text"]:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--app-accent);
+            box-shadow: 0 0 0 2px rgba(214, 158, 46, 0.2);
         }
 
         textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
@@ -140,48 +152,55 @@
             border: 1px dashed #475569; color: #94a3b8; background-color: #0f172a;
             padding: 12px 20px; border-radius: 4px; font-family: var(--font-ui);
             font-size: 15px; text-align: center; cursor: pointer; width: 100%;
-            transition: all 0.2s; text-transform: uppercase;
+            transition: all 0.2s ease; text-transform: uppercase;
         }
-        .file-upload-wrapper:hover .file-upload-btn { border-color: var(--app-accent); color: var(--app-accent); }
+        .file-upload-wrapper:hover .file-upload-btn { border-color: var(--app-accent); color: var(--app-accent); background: rgba(214, 158, 46, 0.05); }
         .file-upload-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; }
 
         /* Image Tools & Sliders */
-        .image-tools { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 15px; }
+        .image-tools { display: flex; gap: 8px; margin-top: 10px; margin-bottom: 15px; }
         .btn-filter {
             flex: 1; padding: 8px; background: #334155; border: none; color: white;
             border-radius: 4px; cursor: pointer; font-family: var(--font-ui);
-            font-size: 12px; text-transform: uppercase;
+            font-size: 12px; text-transform: uppercase; transition: all 0.2s ease;
         }
-        .btn-filter.active { background: var(--app-accent); color: #000; }
+        .btn-filter:hover { background: #475569; }
+        .btn-filter.active { background: var(--app-accent); color: #000; font-weight: bold; }
+        .btn-filter.btn-clear { background: #0f172a; border: 1px solid var(--app-danger); color: var(--app-danger); flex: 0.7; }
+        .btn-filter.btn-clear:hover { background: var(--app-danger); color: white; }
 
-        .slider-group { margin-bottom: 12px; background: #0f172a; padding: 10px; border-radius: 4px; border: 1px solid #334155;}
-        .slider-group label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; color: #cbd5e1; }
+        .slider-group { margin-bottom: 12px; background: #0f172a; padding: 12px; border-radius: 4px; border: 1px solid #334155;}
+        .slider-group label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: #cbd5e1; }
         .slider-group input[type="range"] {
             width: 100%; accent-color: var(--app-accent); cursor: pointer;
         }
 
+        .image-block-divider { border-bottom: 1px dashed #475569; margin: 25px 0; }
+
         /* Export */
-        .export-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .export-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 25px; }
         .btn-export {
             flex: 1; padding: 14px; background: var(--app-accent); color: #0f172a;
             border: none; border-radius: 4px; font-family: var(--font-ui);
             font-size: 16px; font-weight: 600; text-transform: uppercase;
-            cursor: pointer; transition: background 0.2s, transform 0.1s;
+            cursor: pointer; transition: all 0.2s ease;
         }
-        .btn-export:hover { background: #ecc94b; }
-        .btn-export:active { transform: scale(0.98); }
+        .btn-export:hover { background: var(--app-accent-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(214, 158, 46, 0.3); }
+        .btn-export:active { transform: translateY(1px); box-shadow: none; }
 
         /* Preview Panel */
         .preview-panel {
             background: #0f172a; border-radius: 8px; display: flex; justify-content: center;
             align-items: flex-start; overflow: hidden; position: relative; height: calc(100vh - 120px);
+            border: 1px solid #334155; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
         .preview-scroll-container {
             width: 100%; height: 100%; overflow: auto; padding: 20px; display: flex; justify-content: center;
         }
-        .preview-scroll-container::-webkit-scrollbar { width: 8px; height: 8px; }
+        .preview-scroll-container::-webkit-scrollbar { width: 10px; height: 10px; }
         .preview-scroll-container::-webkit-scrollbar-track { background: #0f172a; }
-        .preview-scroll-container::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .preview-scroll-container::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; border: 2px solid #0f172a; }
+        .preview-scroll-container::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
         /* ========================================= */
         /* NEWSPAPER CAPTURE AREA (The actual paper) */
@@ -194,7 +213,7 @@
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
             color: var(--news-text);
             padding: 40px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             transform-origin: top center;
             position: relative;
         }
@@ -254,11 +273,6 @@
         .np-image.sepia { filter: sepia(0.6) contrast(1.1) brightness(0.9); }
         .np-image.color { filter: contrast(1.05); }
 
-        .np-image-placeholder {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-ui); color: #666; font-size: 18px; z-index: 10; background: #ddd;
-        }
-
         /* Text Engine */
         .np-content {
             font-family: var(--font-body); font-size: 15px; line-height: 1.6; text-align: justify;
@@ -269,52 +283,97 @@
         .np-quote-box {
             background: var(--news-text); color: var(--news-bg); padding: 20px;
             font-family: var(--font-logo); font-style: italic; font-size: 16px;
-            text-align: center; margin-top: 20px; break-inside: avoid; display: none;
+            text-align: center; margin-top: 20px; break-inside: avoid; display: none; margin-bottom: 20px;
         }
+
+        /* Default column layout state */
+        .np-col-image-primary { display: block; }
+        .np-col-image-secondary { display: none; }
+        .np-layout-columns { display: block; }
 
         /* ========================================= */
         /* CSS LAYOUT ENGINE                         */
         /* ========================================= */
 
-        /* 1. Historic (Image 2 style) */
+        /* 1. Historic (Single Image) */
         .layout-historic .np-headline-group { order: 1; }
         .layout-historic .np-headline { font-size: 52px; }
         .layout-historic .np-layout-columns { order: 2; display: flex; flex-direction: column; }
-        .layout-historic .np-col-image { margin: 0 auto 25px auto; width: 100%; }
-        .layout-historic .np-image-wrapper { aspect-ratio: 16/10; }
+        .layout-historic .np-col-image-primary { margin: 0 auto 25px auto; width: 100%; }
+        .layout-historic .np-col-image-primary .np-image-wrapper { aspect-ratio: 16/10; }
         .layout-historic .np-content { column-count: 2; column-gap: 35px; }
+        /* Historic Dynamic Fallback */
+        .layout-historic.no-primary-image .np-content { column-count: 3; }
 
-        /* 2. Product Launch (Image 1 style) */
+        /* 2. Modern Product Launch (Portrait left, optional stacked image) */
         .layout-launch .np-headline-group { order: 1; margin-bottom: 20px; }
         .layout-launch .np-headline { font-size: 65px; letter-spacing: -1px; }
         .layout-launch .np-subheadline-bar { display: block; }
-        .layout-launch .np-layout-columns { order: 2; display: flex; gap: 25px; }
-        .layout-launch .np-col-image { width: 45%; }
-        .layout-launch .np-col-text { width: 55%; }
-        .layout-launch .np-image-wrapper { aspect-ratio: 3/4; }
-        .layout-launch .np-content { column-count: 2; column-gap: 20px; }
+        .layout-launch .np-layout-columns { order: 2; display: grid; grid-template-columns: 42% 1fr; gap: 30px; }
+        .layout-launch .np-col-image-primary { grid-column: 1; grid-row: 1; width: 100%; }
+        .layout-launch .np-col-image-primary .np-image-wrapper { aspect-ratio: 4/5; }
+        .layout-launch .np-col-image-secondary { grid-column: 1; grid-row: 2; display: block; width: 100%; }
+        .layout-launch .np-col-image-secondary .np-image-wrapper { aspect-ratio: 1/1; }
+        .layout-launch .np-col-text { grid-column: 2; grid-row: 1 / 4; column-count: 2; column-gap: 25px; }
         .layout-launch .np-quote-box { display: block; }
+        /* Launch Dynamic Fallbacks */
+        .layout-launch.no-primary-image .np-col-image-secondary { grid-row: 1; }
+        .layout-launch.no-primary-image.no-secondary-image .np-col-text { grid-column: 1 / 3; column-count: 3; }
 
-        /* 3. Feature Story */
-        .layout-feature .np-col-image { order: 1; margin-bottom: 25px; width: 100%; }
+        /* 3. In-depth Report with Sidebar (Wide top, dynamic bottom) */
+        .layout-sidebar .np-headline-group { order: 1; margin-bottom: 15px; text-align: left; }
+        .layout-sidebar .np-headline { font-size: 52px; text-align: left; line-height: 1.05; }
+        .layout-sidebar .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+        .layout-sidebar .np-col-image-primary { grid-column: 1 / 4; grid-row: 1; margin-bottom: 5px;}
+        .layout-sidebar .np-col-image-primary .np-image-wrapper { aspect-ratio: 21/9; }
+        .layout-sidebar .np-col-text { grid-column: 1 / 3; grid-row: 2; column-count: 2; column-gap: 30px; }
+        .layout-sidebar .np-col-image-secondary { grid-column: 3 / 4; grid-row: 2; display: block; }
+        .layout-sidebar .np-col-image-secondary .np-image-wrapper { aspect-ratio: 3/4; }
+        .layout-sidebar .np-quote-box { display: block; }
+        /* Sidebar Dynamic Fallbacks */
+        .layout-sidebar.no-secondary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
+
+        /* 4. Visual Showcase (Dual Side-by-Side Images) */
+        .layout-gallery .np-headline-group { order: 1; border-bottom: 2px solid var(--news-text); padding-bottom: 20px; margin-bottom: 20px; }
+        .layout-gallery .np-headline { font-size: 58px; }
+        .layout-gallery .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); padding: 0; font-size: 24px; text-transform: none; font-style: italic; font-weight: 500; border: none; letter-spacing: normal;}
+        .layout-gallery .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .layout-gallery .np-col-image-primary { grid-column: 1; }
+        .layout-gallery .np-col-image-primary .np-image-wrapper { aspect-ratio: 4/3; }
+        .layout-gallery .np-col-image-secondary { grid-column: 2; display: block; }
+        .layout-gallery .np-col-image-secondary .np-image-wrapper { aspect-ratio: 4/3; }
+        .layout-gallery .np-col-text { grid-column: 1 / 3; column-count: 3; column-gap: 25px; font-size: 14.5px; margin-top: 10px;}
+        /* Gallery Dynamic Fallbacks */
+        .layout-gallery.no-secondary-image .np-col-image-primary { grid-column: 1 / 3; }
+        .layout-gallery.no-secondary-image .np-col-image-primary .np-image-wrapper { aspect-ratio: 21/9; }
+        .layout-gallery.no-primary-image .np-col-image-secondary { grid-column: 1 / 3; }
+        .layout-gallery.no-primary-image .np-col-image-secondary .np-image-wrapper { aspect-ratio: 21/9; }
+
+
+        /* 5. Feature Story (Single Image) */
+        .layout-feature .np-col-image-primary { order: 1; margin-bottom: 25px; width: 100%; }
+        .layout-feature .np-col-image-primary .np-image-wrapper { aspect-ratio: 2/1; }
         .layout-feature .np-headline-group { order: 2; border-bottom: 2px solid var(--news-text); padding-bottom: 20px; margin-bottom: 20px; }
         .layout-feature .np-headline { font-size: 58px; }
         .layout-feature .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); padding: 0; font-size: 24px; text-transform: none; font-style: italic; font-weight: 500; border: none; letter-spacing: normal;}
         .layout-feature .np-layout-columns { order: 3; display: flex; flex-direction: column; }
-        .layout-feature .np-image-wrapper { aspect-ratio: 2/1; }
         .layout-feature .np-content { column-count: 3; column-gap: 25px; font-size: 14.5px; }
+        /* Feature Dynamic Fallback */
+        .layout-feature.no-primary-image .np-content { column-count: 3; }
 
-        /* 4. Text-Heavy Economic */
+        /* 6. Text-Heavy Economic (Single Image) */
         .layout-textheavy .np-headline-group { order: 1; margin-bottom: 15px; text-align: left; }
         .layout-textheavy .np-headline { font-size: 42px; text-align: left; }
         .layout-textheavy .np-layout-columns { order: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .layout-textheavy .np-col-image { grid-column: 1 / 2; }
+        .layout-textheavy .np-col-image-primary { grid-column: 1 / 2; }
+        .layout-textheavy .np-col-image-primary .np-image-wrapper { aspect-ratio: 1/1; }
         .layout-textheavy .np-col-text { grid-column: 2 / 4; }
-        .layout-textheavy .np-image-wrapper { aspect-ratio: 1/1; }
         .layout-textheavy .np-content { column-count: 2; column-gap: 25px; }
+        /* Text-Heavy Dynamic Fallback */
+        .layout-textheavy.no-primary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
 
-        /* 5. Text Only - Two Column Editorial */
-        .layout-text-two-col .np-col-image { display: none; }
+        /* 7. Text Only - Two Column Editorial */
+        .layout-text-two-col .np-col-image-primary, .layout-text-two-col .np-col-image-secondary { display: none; }
         .layout-text-two-col .np-section-category {
             display: block; text-align: center; font-family: var(--font-headline); font-size: 22px;
             font-weight: 700; color: var(--news-blue); margin-bottom: 5px;
@@ -332,8 +391,8 @@
         .layout-text-two-col .np-layout-columns { order: 3; display: block; }
         .layout-text-two-col .np-content { column-count: 2; column-gap: 35px; font-size: 15px; }
 
-        /* 6. Text Only - Three Column Bulletin */
-        .layout-text-three-col .np-col-image { display: none; }
+        /* 8. Text Only - Three Column Bulletin */
+        .layout-text-three-col .np-col-image-primary, .layout-text-three-col .np-col-image-secondary { display: none; }
         .layout-text-three-col .np-section-category {
             display: block; font-family: var(--font-headline); font-size: 18px; font-weight: bold;
             text-transform: uppercase; border-bottom: 2px solid var(--news-text); padding-bottom: 5px; margin-bottom: 15px;
@@ -383,10 +442,12 @@
             <div class="form-group">
                 <label for="templateSelect">Newspaper Layout</label>
                 <select id="templateSelect">
-                    <option value="layout-historic">1976 Historic Frontpage</option>
-                    <option value="layout-launch">Modern Product Launch</option>
-                    <option value="layout-feature">Full-Width Feature Story</option>
-                    <option value="layout-textheavy">Three-Column Economic Report</option>
+                    <option value="layout-sidebar">In-depth Report with Sidebar (Wide Top, Optional Side)</option>
+                    <option value="layout-launch">Modern Product Launch (Portrait Left, Optional Side)</option>
+                    <option value="layout-gallery">Visual Showcase (Dual Top Images)</option>
+                    <option value="layout-historic">1976 Historic Frontpage (Single Image)</option>
+                    <option value="layout-feature">Full-Width Feature Story (Single Image)</option>
+                    <option value="layout-textheavy">Three-Column Economic Report (Single Image)</option>
                     <option value="layout-text-two-col">Text Only - Editorial (Two Column)</option>
                     <option value="layout-text-three-col">Text Only - Bulletin (Three Column)</option>
                 </select>
@@ -409,7 +470,7 @@
 
             <div class="form-group">
                 <label for="inPrice">Price / Right Meta</label>
-                <input type="text" id="inPrice" value="PRICE: 2 ARCASIAN FRANCS">
+                <input type="text" id="inPrice" value="PRICE: 2 ARCASIAN LIRAS">
             </div>
 
             <div class="form-group">
@@ -422,32 +483,66 @@
                 <input type="text" id="inSubheadline" value="A NEW ERA OF SMART LIVING STARTS HERE">
             </div>
 
-            <div class="form-group" id="imageUploadGroup">
-                <label>Frontpage Photograph (Canva-style Frame)</label>
+            <!-- PRIMARY IMAGE UPLOAD -->
+            <div class="form-group" id="imageUploadGroup1">
+                <label>Primary Photograph (Optional)</label>
                 <div class="file-upload-wrapper">
-                    <div class="file-upload-btn" id="uploadText">Choose Image File...</div>
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <div class="file-upload-btn" id="uploadText1">Choose Image File...</div>
+                    <input type="file" id="imageUpload1" accept="image/*">
                 </div>
                 
-                <div class="image-tools" id="filterTools">
+                <div class="image-tools" id="filterTools1">
                     <button class="btn-filter active" data-filter="grayscale">B&W</button>
                     <button class="btn-filter" data-filter="sepia">Sepia</button>
                     <button class="btn-filter" data-filter="color">Color</button>
+                    <button class="btn-filter btn-clear" id="btnRemove1">Clear</button>
                 </div>
 
-                <!-- Image Adjustment Sliders -->
-                <div id="imageAdjustments" style="display: none;">
+                <div id="imageAdjustments1" style="display: none;">
                     <div class="slider-group">
-                        <label><span>Zoom</span> <span id="valZoom">1.0x</span></label>
-                        <input type="range" id="imgZoom" min="1" max="3" step="0.05" value="1">
+                        <label><span>Zoom</span> <span id="valZoom1">1.0x</span></label>
+                        <input type="range" id="imgZoom1" min="1" max="3" step="0.05" value="1">
                     </div>
                     <div class="slider-group">
-                        <label><span>Horizontal Pan</span> <span id="valPanX">50%</span></label>
-                        <input type="range" id="imgPanX" min="0" max="100" step="1" value="50">
+                        <label><span>Horizontal Pan</span> <span id="valPanX1">50%</span></label>
+                        <input type="range" id="imgPanX1" min="0" max="100" step="1" value="50">
                     </div>
                     <div class="slider-group">
-                        <label><span>Vertical Pan</span> <span id="valPanY">50%</span></label>
-                        <input type="range" id="imgPanY" min="0" max="100" step="1" value="50">
+                        <label><span>Vertical Pan</span> <span id="valPanY1">50%</span></label>
+                        <input type="range" id="imgPanY1" min="0" max="100" step="1" value="50">
+                    </div>
+                </div>
+            </div>
+
+            <div id="imageDivider" class="image-block-divider" style="display: none;"></div>
+
+            <!-- SECONDARY IMAGE UPLOAD (OPTIONAL) -->
+            <div class="form-group" id="imageUploadGroup2" style="display: none;">
+                <label>Secondary Photograph (Optional)</label>
+                <div class="file-upload-wrapper">
+                    <div class="file-upload-btn" id="uploadText2">Choose Image File...</div>
+                    <input type="file" id="imageUpload2" accept="image/*">
+                </div>
+                
+                <div class="image-tools" id="filterTools2">
+                    <button class="btn-filter active" data-filter="grayscale">B&W</button>
+                    <button class="btn-filter" data-filter="sepia">Sepia</button>
+                    <button class="btn-filter" data-filter="color">Color</button>
+                    <button class="btn-filter btn-clear" id="btnRemove2">Clear</button>
+                </div>
+
+                <div id="imageAdjustments2" style="display: none;">
+                    <div class="slider-group">
+                        <label><span>Zoom</span> <span id="valZoom2">1.0x</span></label>
+                        <input type="range" id="imgZoom2" min="1" max="3" step="0.05" value="1">
+                    </div>
+                    <div class="slider-group">
+                        <label><span>Horizontal Pan</span> <span id="valPanX2">50%</span></label>
+                        <input type="range" id="imgPanX2" min="0" max="100" step="1" value="50">
+                    </div>
+                    <div class="slider-group">
+                        <label><span>Vertical Pan</span> <span id="valPanY2">50%</span></label>
+                        <input type="range" id="imgPanY2" min="0" max="100" step="1" value="50">
                     </div>
                 </div>
             </div>
@@ -477,19 +572,19 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             <div class="preview-scroll-container">
                 
                 <!-- THE NEWSPAPER (Target for Capture) -->
-                <div id="capture-area" class="layout-historic">
+                <div id="capture-area" class="layout-sidebar">
                     
                     <!-- Header Area -->
                     <div class="np-header">
                         <div class="np-logo-container">
                             <h1 class="np-logo">L'Étoile<span class="star">★</span>Arcasienne</h1>
-                            <p class="np-motto">« Ainsi toujours aux tyrans, et à l'étatisme! »</p>
+                            <p class="np-motto">« Ainsi toujours aux tyrans — et à l'étatisme! »</p>
                         </div>
                         <hr class="np-divider-thick">
                         <div class="np-info-row">
                             <span id="outLocation">VENTRIE, ÎLE-DE-VENTRIE</span>
                             <span id="outDate">THURSDAY, AUGUST 12, 1976</span>
-                            <span id="outPrice">PRICE: 2 ARCASIAN FRANCS</span>
+                            <span id="outPrice">PRICE: 2 ARCASIAN LIRAS</span>
                         </div>
                         <hr class="np-divider-thin">
                     </div>
@@ -512,22 +607,33 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
                         </div>
 
                         <div class="np-layout-columns">
-                            <!-- Image Block -->
-                            <div class="np-col-image">
+                            
+                            <!-- Primary Image Block -->
+                            <div class="np-col-image-primary">
                                 <div class="np-image-container">
                                     <div class="np-image-wrapper">
-                                        <!-- Replaced img with div for background-image framework -->
-                                        <div id="outImage" class="np-image grayscale" style="display:none;"></div>
-                                        <div class="np-image-placeholder" id="placeholder">Insert Photograph</div>
+                                        <div id="outImage1" class="np-image grayscale" style="display:none;"></div>
+                                        <!-- Placeholder hidden by logic if empty -->
                                     </div>
                                 </div>
                             </div>
                             
+                            <!-- Secondary Image Block -->
+                            <div class="np-col-image-secondary">
+                                <div class="np-image-container">
+                                    <div class="np-image-wrapper">
+                                        <div id="outImage2" class="np-image grayscale" style="display:none;"></div>
+                                        <!-- Placeholder hidden by logic if empty -->
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Text Block -->
                             <div class="np-col-text">
                                 <div class="np-content" id="outContent"></div>
                                 <div class="np-quote-box" id="outQuote"></div>
                             </div>
+
                         </div>
                     </div>
 
@@ -538,7 +644,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
     </div>
 
     <footer>
-        Inspired by the Suzerain universe by Torpor Games. This is a fan made newspaper generator. All rights to Suzerain belong to Torpor Games.
+        © 2026. Inspired by the Suzerain universe by Torpor Games. This is a fan-made newspaper generator. All rights to Suzerain belong to Torpor Games. Created with Arcasian Liberal Spirit.
     </footer>
 
     <div id="status-toast">Exporting successfully...</div>
@@ -547,18 +653,12 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
         // --- State and DOM Elements ---
         const captureArea = document.getElementById('capture-area');
         const templateSelect = document.getElementById('templateSelect');
-        const imageUpload = document.getElementById('imageUpload');
-        const uploadText = document.getElementById('uploadText');
-        const outImage = document.getElementById('outImage');
-        const placeholder = document.getElementById('placeholder');
         
-        // Adjustment Elements
-        const zoomSlider = document.getElementById('imgZoom');
-        const panXSlider = document.getElementById('imgPanX');
-        const panYSlider = document.getElementById('imgPanY');
-        
-        let currentImageSrc = null;
-        let currentFilter = 'grayscale';
+        // Image States
+        const imgState = {
+            '1': { src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 },
+            '2': { src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 }
+        };
 
         // --- Live Update Function ---
         function updatePreview() {
@@ -566,17 +666,39 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             captureArea.className = template; 
 
             // Toggle Editor Fields based on template layout requirements
-            const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col'].includes(template);
+            const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col', 'layout-gallery', 'layout-sidebar'].includes(template);
             document.getElementById('subheadlineGroup').style.display = needsSubheadline ? 'block' : 'none';
 
-            const needsQuote = template === 'layout-launch';
+            const needsQuote = ['layout-launch', 'layout-sidebar'].includes(template);
             document.getElementById('quoteGroup').style.display = needsQuote ? 'block' : 'none';
 
             const needsCategory = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
             document.getElementById('categoryGroup').style.display = needsCategory ? 'block' : 'none';
 
             const isTextOnly = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
-            document.getElementById('imageUploadGroup').style.display = isTextOnly ? 'none' : 'block';
+            document.getElementById('imageUploadGroup1').style.display = isTextOnly ? 'none' : 'block';
+
+            const needsSecondImage = ['layout-launch', 'layout-gallery', 'layout-sidebar'].includes(template);
+            document.getElementById('imageUploadGroup2').style.display = needsSecondImage ? 'block' : 'none';
+            document.getElementById('imageDivider').style.display = needsSecondImage ? 'block' : 'none';
+
+            // OPTIONALITY LOGIC: Hide primary image column entirely if no image is loaded
+            if (!imgState['1'].src || isTextOnly) {
+                document.querySelector('.np-col-image-primary').style.display = 'none';
+                captureArea.classList.add('no-primary-image');
+            } else {
+                document.querySelector('.np-col-image-primary').style.display = 'block';
+                captureArea.classList.remove('no-primary-image');
+            }
+
+            // OPTIONALITY LOGIC: Hide secondary image column entirely if no image is loaded
+            if (!imgState['2'].src || !needsSecondImage || isTextOnly) {
+                document.querySelector('.np-col-image-secondary').style.display = 'none';
+                captureArea.classList.add('no-secondary-image');
+            } else {
+                document.querySelector('.np-col-image-secondary').style.display = 'block';
+                captureArea.classList.remove('no-secondary-image');
+            }
 
             // Update Text Elements
             document.getElementById('outCategory').innerText = document.getElementById('inCategory').value;
@@ -599,71 +721,94 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             const quoteText = document.getElementById('inQuote').value;
             document.getElementById('outQuote').innerHTML = quoteText.replace(/\n/g, '<br>');
 
-            // Image Source & Filter
-            if (currentImageSrc) {
-                outImage.style.backgroundImage = `url("${currentImageSrc}")`;
-                outImage.style.display = 'block';
-                placeholder.style.display = 'none';
-                outImage.className = `np-image ${currentFilter}`;
-            }
-
-            // Always update image transforms (zoom/pan)
-            applyImageTransform();
+            // Image Render
+            ['1', '2'].forEach(id => {
+                const outImage = document.getElementById('outImage' + id);
+                if (imgState[id].src) {
+                    outImage.style.backgroundImage = `url("${imgState[id].src}")`;
+                    outImage.style.display = 'block';
+                    outImage.className = `np-image ${imgState[id].filter}`;
+                } else {
+                    outImage.style.display = 'none';
+                }
+                applyImageTransform(id);
+            });
         }
 
-        function applyImageTransform() {
-            if(!currentImageSrc) return;
-            const zoom = zoomSlider.value;
-            const panX = panXSlider.value;
-            const panY = panYSlider.value;
+        function applyImageTransform(id) {
+            if(!imgState[id].src) return;
+            const state = imgState[id];
+            const outImage = document.getElementById('outImage' + id);
             
-            // Update labels
-            document.getElementById('valZoom').innerText = parseFloat(zoom).toFixed(2) + 'x';
-            document.getElementById('valPanX').innerText = panX + '%';
-            document.getElementById('valPanY').innerText = panY + '%';
+            document.getElementById('valZoom' + id).innerText = parseFloat(state.zoom).toFixed(2) + 'x';
+            document.getElementById('valPanX' + id).innerText = state.panX + '%';
+            document.getElementById('valPanY' + id).innerText = state.panY + '%';
             
-            // Canva-Style Image Framing (Background Image Approach):
-            // - background-position controls how the image aligns within the fixed crop box
-            // - transform-origin defines the anchor for the zoom
-            // - transform: scale enlarges the aligned image bounds
-            outImage.style.backgroundPosition = `${panX}% ${panY}%`;
-            outImage.style.transformOrigin = `${panX}% ${panY}%`;
-            outImage.style.transform = `scale(${zoom})`;
+            outImage.style.backgroundPosition = `${state.panX}% ${state.panY}%`;
+            outImage.style.transformOrigin = `${state.panX}% ${state.panY}%`;
+            outImage.style.transform = `scale(${state.zoom})`;
         }
 
-        // --- Event Listeners for Live Typing & Sliders ---
+        // --- Setup Handlers for Multiple Images ---
+        function setupImageHandlers(idSuffix) {
+            const upload = document.getElementById('imageUpload' + idSuffix);
+            const text = document.getElementById('uploadText' + idSuffix);
+            const adjust = document.getElementById('imageAdjustments' + idSuffix);
+            const zoom = document.getElementById('imgZoom' + idSuffix);
+            const panX = document.getElementById('imgPanX' + idSuffix);
+            const panY = document.getElementById('imgPanY' + idSuffix);
+            const filters = document.querySelectorAll(`#filterTools${idSuffix} .btn-filter:not(.btn-clear)`);
+            const btnRemove = document.getElementById('btnRemove' + idSuffix);
+
+            upload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    text.innerText = file.name;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imgState[idSuffix].src = event.target.result;
+                        adjust.style.display = 'block';
+                        updatePreview();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            btnRemove.addEventListener('click', () => {
+                imgState[idSuffix].src = null;
+                upload.value = "";
+                text.innerText = "Choose Image File...";
+                adjust.style.display = 'none';
+                updatePreview();
+            });
+
+            [zoom, panX, panY].forEach(slider => {
+                slider.addEventListener('input', () => {
+                    imgState[idSuffix].zoom = zoom.value;
+                    imgState[idSuffix].panX = panX.value;
+                    imgState[idSuffix].panY = panY.value;
+                    applyImageTransform(idSuffix);
+                });
+            });
+
+            filters.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filters.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    imgState[idSuffix].filter = e.target.dataset.filter;
+                    updatePreview();
+                });
+            });
+        }
+
+        // Initialize Dual Images
+        setupImageHandlers('1');
+        setupImageHandlers('2');
+
+        // --- Event Listeners for Live Typing ---
         const inputs = ['inLocation', 'inDate', 'inPrice', 'inHeadline', 'inSubheadline', 'inContent', 'inQuote', 'inCategory', 'templateSelect'];
         inputs.forEach(id => {
             document.getElementById(id).addEventListener('input', updatePreview);
-        });
-
-        [zoomSlider, panXSlider, panYSlider].forEach(slider => {
-            slider.addEventListener('input', applyImageTransform);
-        });
-
-        // --- Image Upload Handler ---
-        imageUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                uploadText.innerText = file.name;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    currentImageSrc = event.target.result;
-                    document.getElementById('imageAdjustments').style.display = 'block';
-                    updatePreview();
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // --- Filter Buttons Handler ---
-        document.querySelectorAll('.btn-filter').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.dataset.filter;
-                updatePreview();
-            });
         });
 
         // --- Responsive Scaling for Preview Area ---
@@ -708,7 +853,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
 
             try {
                 const canvas = await html2canvas(clone, {
-                    scale: 2, // High resolution
+                    scale: 3, // Very High resolution
                     useCORS: true,
                     backgroundColor: '#f4f0e6',
                     logging: false
@@ -742,7 +887,7 @@ While the Reform Party continues to champion burdensome oversight, the numbers s
             }
         }
 
-        // Initialize
+        // Initialize App
         updatePreview();
         setTimeout(resizePreview, 100);
 
