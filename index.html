@@ -362,7 +362,74 @@
         .layout-textheavy .np-content { column-count: 2; column-gap: 25px; }
         .layout-textheavy.no-primary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
 
-        /* 7 & 8. Text Only Layouts */
+        /* 7. Op-Ed (Opinion/Editorial) */
+        .layout-oped .np-headline-group { order: 1; text-align: left; border-bottom: 2px solid var(--news-text); padding-bottom: 15px; margin-bottom: 25px;}
+        .layout-oped .np-headline { font-size: 46px; line-height: 1.1; }
+        .layout-oped .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); font-style: italic; padding: 0; font-size: 18px; text-transform: none; font-weight: normal; margin-top: 10px; letter-spacing: 0; }
+        .layout-oped .np-layout-columns { order: 2; display: grid; grid-template-columns: 160px 1fr; gap: 35px; }
+        .layout-oped .np-col-media-primary { grid-column: 1; display: flex; flex-direction: column; gap: 20px; }
+        .layout-oped .np-col-media-primary .np-image-container:first-child { border-radius: 50%; overflow: hidden; padding: 0; border: 4px solid var(--news-blue); background: var(--news-blue); }
+        .layout-oped .np-col-media-primary .np-image-container:first-child .np-image-wrapper { aspect-ratio: 1/1; }
+        .layout-oped .np-col-media-primary .np-image-container:not(:first-child) { border-radius: 4px; }
+        .layout-oped .np-col-media-primary .np-image-container:not(:first-child) .np-image-wrapper { aspect-ratio: 1/1; }
+        .layout-oped .np-col-text { grid-column: 2; column-count: 2; column-gap: 30px; }
+        .layout-oped.no-primary-image .np-layout-columns { display: block; }
+        .layout-oped.no-primary-image .np-col-text { column-count: 3; }
+
+        /* 8. Interview Profile */
+        .layout-interview .np-headline-group { order: 1; margin-bottom: 30px; text-align: left; border-top: 4px solid var(--news-text); border-bottom: 1px solid var(--news-text); padding: 15px 0;}
+        .layout-interview .np-headline { font-size: 55px; text-transform: uppercase; letter-spacing: -1px; }
+        .layout-interview .np-subheadline-bar { display: block; background: transparent; color: var(--news-blue); padding: 0; font-size: 22px; margin-top: 10px; font-weight: 500; text-transform: none; letter-spacing: 0;}
+        .layout-interview .np-layout-columns { order: 2; display: grid; grid-template-columns: 35% 1fr; gap: 35px; }
+        .layout-interview .np-col-media-primary { grid-column: 1; display: flex; flex-direction: column; gap: 20px; }
+        .layout-interview .np-col-media-primary .np-image-wrapper { aspect-ratio: 3/4; }
+        .layout-interview .np-col-text { grid-column: 2; column-count: 2; column-gap: 25px; font-size: 15.5px;}
+        .layout-interview .np-quote-box { display: block; background: transparent; color: var(--news-blue); border-top: 2px solid var(--news-blue); border-bottom: 2px solid var(--news-blue); font-size: 22px; padding: 15px 0; margin-top: 0; margin-bottom: 25px; line-height: 1.4; text-align: left;}
+        .layout-interview.no-primary-image .np-layout-columns { display: block; }
+        .layout-interview.no-primary-image .np-col-text { column-count: 3; }
+
+        /* 9. Investigative Exposé */
+        .layout-investigative .np-section-category { display: block; text-align: center; color: var(--news-bg); background: var(--news-text); padding: 5px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 25px; font-size: 18px;}
+        .layout-investigative .np-headline-group { order: 1; text-align: center; margin-bottom: 30px; }
+        .layout-investigative .np-headline { font-size: 68px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; line-height: 0.95; }
+        .layout-investigative .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); font-family: var(--font-ui); font-size: 24px; padding: 0; margin-top: 15px; border-top: 2px solid var(--news-text); border-bottom: 2px solid var(--news-text); padding: 10px 0;}
+        .layout-investigative .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; }
+        .layout-investigative .np-col-media-primary { grid-column: 1 / 4; margin-bottom: 10px; }
+        .layout-investigative .np-col-media-primary .np-image-wrapper { aspect-ratio: 21/9; border: 4px solid var(--news-text); box-sizing: border-box; }
+        .layout-investigative .np-col-text { grid-column: 1 / 3; column-count: 2; column-gap: 25px; }
+        .layout-investigative .np-col-media-secondary { grid-column: 3; display: flex; flex-direction: column; gap: 20px;}
+        .layout-investigative .np-col-media-secondary .np-image-wrapper { aspect-ratio: 1/1; border: 2px solid var(--news-text); box-sizing: border-box;}
+        .layout-investigative .np-quote-box { display: block; background: transparent; border: 4px solid var(--news-text); color: var(--news-text); font-size: 24px; font-weight: bold; padding: 20px; font-style: normal; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px;}
+        .layout-investigative.no-secondary-image .np-col-text { grid-column: 1 / 4; column-count: 3; }
+        .layout-investigative.no-primary-image .np-col-media-primary { display: none !important;}
+
+        /* 10. Arts & Culture Review */
+        .layout-review .np-section-category { display: inline-block; background: var(--news-blue); color: var(--news-bg); padding: 5px 15px; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 1px; font-size: 16px; margin-bottom: 15px;}
+        .layout-review .np-headline-group { order: 1; text-align: left; margin-bottom: 20px; border-bottom: 4px solid var(--news-blue); padding-bottom: 15px;}
+        .layout-review .np-headline { font-size: 48px; color: var(--news-blue); line-height: 1.05; }
+        .layout-review .np-subheadline-bar { display: block; background: transparent; color: #b8860b; font-family: var(--font-logo); font-size: 28px; padding: 0; margin-top: 10px; letter-spacing: 5px; }
+        .layout-review .np-layout-columns { order: 2; display: grid; grid-template-columns: 1fr 280px; gap: 30px; }
+        .layout-review .np-col-text { grid-column: 1; column-count: 2; column-gap: 25px; }
+        .layout-review .np-col-media-primary { grid-column: 2; display: flex; flex-direction: column; gap: 20px;}
+        .layout-review .np-col-media-primary .np-image-container:first-child .np-image-wrapper { aspect-ratio: 2/3; }
+        .layout-review .np-col-media-primary .np-image-container:not(:first-child) .np-image-wrapper { aspect-ratio: 16/9; }
+        .layout-review .np-quote-box { display: block; background: #e2e8f0; color: var(--news-blue); font-size: 18px; border-left: 5px solid var(--news-blue); padding: 15px; text-align: left; margin-bottom: 20px;}
+        .layout-review.no-primary-image .np-layout-columns { display: block; }
+        .layout-review.no-primary-image .np-col-text { column-count: 3; }
+
+        /* 11. Memorial / Obituary */
+        .layout-obituary .np-section-category { display: block; text-align: center; font-family: var(--font-headline); font-size: 24px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid var(--news-text); border-top: 2px solid var(--news-text); padding: 5px 0; margin-bottom: 30px; letter-spacing: 2px;}
+        .layout-obituary .np-headline-group { order: 2; margin-bottom: 20px; text-align: center; }
+        .layout-obituary .np-headline { font-size: 55px; line-height: 1.1; margin-top: 15px; }
+        .layout-obituary .np-subheadline-bar { display: block; background: transparent; color: var(--news-text); font-family: var(--font-body); font-style: italic; padding: 0; font-size: 20px; text-transform: none; font-weight: normal; margin-top: 5px; letter-spacing: 1px; }
+        .layout-obituary .np-layout-columns { order: 3; display: flex; flex-direction: column; align-items: center;}
+        .layout-obituary .np-col-media-primary { display: flex; justify-content: center; margin-bottom: 25px; width: 100%;}
+        .layout-obituary .np-col-media-primary .np-image-container { width: 280px; border-radius: 50%; overflow: hidden; padding: 5px; border: 3px double var(--news-text); background: transparent; }
+        .layout-obituary .np-col-media-primary .np-image-wrapper { aspect-ratio: 1/1; border-radius: 50%;}
+        .layout-obituary .np-col-text { width: 100%; column-count: 2; column-gap: 40px; text-align: justify; font-size: 16px; line-height: 1.7; }
+        .layout-obituary.no-primary-image .np-col-text { column-count: 3; }
+
+        /* 12 & 13. Text Only Layouts */
         .layout-text-two-col .np-col-media-primary, .layout-text-two-col .np-col-media-secondary { display: none !important; }
         .layout-text-two-col .np-section-category { display: block; text-align: center; font-family: var(--font-headline); font-size: 22px; font-weight: 700; color: var(--news-blue); margin-bottom: 5px; }
         .layout-text-two-col .np-headline-group { order: 1; margin-bottom: 15px; text-align: center; }
@@ -416,6 +483,11 @@
             <div class="form-group">
                 <label for="templateSelect">Newspaper Layout</label>
                 <select id="templateSelect">
+                    <option value="layout-investigative">Investigative Exposé (Dramatic Banner, Stackable Side)</option>
+                    <option value="layout-review">Arts & Culture Review (Rating Subhead, Stackable Side)</option>
+                    <option value="layout-obituary">Memorial / Obituary (Centered Circular Portrait)</option>
+                    <option value="layout-oped">Opinion & Editorial (Author Headshot)</option>
+                    <option value="layout-interview">Interview Profile (Portrait & Quote)</option>
                     <option value="layout-launch">Modern Product Launch (Portrait Left, Stackable Images)</option>
                     <option value="layout-sidebar">In-depth Report with Sidebar (Wide Top, Stackable Side)</option>
                     <option value="layout-gallery">Visual Showcase (Dual Top Images)</option>
@@ -429,7 +501,7 @@
 
             <div class="form-group" id="categoryGroup" style="display: none;">
                 <label for="inCategory">Section Category</label>
-                <input type="text" id="inCategory" value="Domestic — Arcasia">
+                <input type="text" id="inCategory" value="Exclusive Investigation">
             </div>
 
             <div class="form-group">
@@ -449,12 +521,12 @@
 
             <div class="form-group">
                 <label for="inHeadline">Headline</label>
-                <textarea id="inHeadline" style="min-height: 70px;">SOUTHERN COLLAPSE IN JINKAN</textarea>
+                <textarea id="inHeadline" style="min-height: 70px;">CORRUPTION AT THE HIGHEST LEVELS</textarea>
             </div>
 
             <div class="form-group" id="subheadlineGroup" style="display: none;">
-                <label for="inSubheadline">Subheadline / Highlight</label>
-                <input type="text" id="inSubheadline" value="REFORM WEAKNESS TURNS VICTORY INTO DISASTER">
+                <label for="inSubheadline">Subheadline / Rating / Author</label>
+                <input type="text" id="inSubheadline" value="REFORM PARTY INSIDERS IMPLICATED IN MASSIVE BRIBERY RING">
             </div>
 
             <!-- DYNAMIC IMAGES SECTION -->
@@ -466,21 +538,22 @@
             </div>
 
             <div class="form-group">
-                <label for="inContent">Article Content (Use double Enter for paragraphs)</label>
+                <label for="inContent">
+                    <span>Article Content</span>
+                    <span style="font-size: 11px; font-weight: normal; color: #64748b;">(Use double Enter for paragraphs. Type &lt;b&gt;text&lt;/b&gt; for bold Q&A)</span>
+                </label>
                 <textarea id="inContent" style="min-height: 300px;">In a damning contrast that exposes the new Reform government's dangerous weakness, Arcasian forces are achieving sweeping victories in northern Jinkan while the southern front teeters on the edge of total collapse.
 
 Military sources confirm that in the northern Temple Plains, our mechanized troops and air superiority have delivered decisive gains: large revolutionary forces have been encircled, key border cities captured, and enemy supply lines severed with relatively low casualties. Morale among northern troops is rising.
 
 In the south, however, the situation is rapidly deteriorating. Revolutionary forces have outflanked our lines, encircled critical western and southern port cities, and are strangling supply routes. Strategic territory is being lost daily, and the risk of a full southern collapse grows by the hour.
 
-Philippe Laurent Beaumont, speaking forcefully for the Democratic Concord, did not mince words: "Our troops are winning in the north while Reform dithers in the south. This is what happens when radicals run the government and union militants dictate policy at home."
-
 The Democratic Concord stands ready to fight for Arcasia: back our troops, defend the PMCs who protect them, restore real law and order at home, and finish the job in Jinkan with honor, not weakness.</textarea>
             </div>
 
             <div class="form-group" id="quoteGroup" style="display: none;">
-                <label for="inQuote">Quote Box</label>
-                <textarea id="inQuote" style="min-height: 70px;">"Our troops are winning in the north while Reform dithers in the south. This is what happens when radicals run the government."&#10;— Philippe Laurent Beaumont</textarea>
+                <label for="inQuote">Pull Quote Box</label>
+                <textarea id="inQuote" style="min-height: 70px;">"The entire system is rotten to the core. We need accountability now."</textarea>
             </div>
 
             <div class="export-actions">
@@ -494,13 +567,13 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
             <div class="preview-scroll-container">
                 
                 <!-- THE NEWSPAPER (Target for Capture) -->
-                <div id="capture-area" class="layout-launch">
+                <div id="capture-area" class="layout-investigative">
                     
                     <!-- Header Area -->
                     <div class="np-header">
                         <div class="np-logo-container">
                             <h1 class="np-logo">L'Étoile<span class="star">★</span>Arcasienne</h1>
-                            <p class="np-motto">« Ainsi toujours aux tyrans, et à l'étatisme! »</p>
+                            <p class="np-motto">« Ainsi toujours aux tyrans — et à l'étatisme! »</p>
                         </div>
                         <hr class="np-divider-thick">
                         <div class="np-info-row">
@@ -513,11 +586,11 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
 
                     <!-- Unified Body Content -->
                     <div class="np-main">
-                        <div class="np-section-category" id="outCategory">Domestic — Arcasia</div>
+                        <div class="np-section-category" id="outCategory">Exclusive Investigation</div>
                         
                         <div class="np-headline-group">
-                            <h2 class="np-headline" id="outHeadline">SOUTHERN COLLAPSE IN JINKAN</h2>
-                            <div class="np-subheadline-bar" id="outSubheadline">REFORM WEAKNESS TURNS VICTORY INTO DISASTER</div>
+                            <h2 class="np-headline" id="outHeadline">CORRUPTION AT THE HIGHEST LEVELS</h2>
+                            <div class="np-subheadline-bar" id="outSubheadline">REFORM PARTY INSIDERS IMPLICATED IN MASSIVE BRIBERY RING</div>
                         </div>
 
                         <div class="np-ornament">
@@ -536,8 +609,8 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
 
                             <!-- Text Block -->
                             <div class="np-col-text">
-                                <div class="np-content" id="outContent"></div>
                                 <div class="np-quote-box" id="outQuote"></div>
+                                <div class="np-content" id="outContent"></div>
                             </div>
 
                         </div>
@@ -672,7 +745,7 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
             // Immediate UI update for the slider text via parent traversal
             event.target.previousElementSibling.lastElementChild.innerText = param === 'zoom' ? parseFloat(value).toFixed(2) + 'x' : value + '%';
             updatePreview();
-            saveState(); // Debouncing is ideal but this is safe enough for small state
+            saveState(); // Debouncing is safe enough for small state
         }
 
         // Generate Preview HTML for an image
@@ -692,19 +765,16 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
             const templateSelect = document.getElementById('templateSelect');
             const template = templateSelect.value;
             
-            // Apply layout wrapper class safely since captureArea is globally defined
-            if(captureArea) {
-                captureArea.className = template; 
-            }
+            if(captureArea) captureArea.className = template; 
 
             // Toggle Editor Fields based on template
-            const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col', 'layout-gallery', 'layout-sidebar'].includes(template);
+            const needsSubheadline = ['layout-launch', 'layout-feature', 'layout-text-two-col', 'layout-text-three-col', 'layout-gallery', 'layout-sidebar', 'layout-oped', 'layout-interview', 'layout-obituary', 'layout-review', 'layout-investigative'].includes(template);
             document.getElementById('subheadlineGroup').style.display = needsSubheadline ? 'block' : 'none';
 
-            const needsQuote = ['layout-launch', 'layout-sidebar'].includes(template);
+            const needsQuote = ['layout-launch', 'layout-sidebar', 'layout-interview', 'layout-review', 'layout-investigative'].includes(template);
             document.getElementById('quoteGroup').style.display = needsQuote ? 'block' : 'none';
 
-            const needsCategory = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
+            const needsCategory = ['layout-text-two-col', 'layout-text-three-col', 'layout-oped', 'layout-interview', 'layout-launch', 'layout-sidebar', 'layout-gallery', 'layout-feature', 'layout-textheavy', 'layout-obituary', 'layout-review', 'layout-investigative'].includes(template);
             document.getElementById('categoryGroup').style.display = needsCategory ? 'block' : 'none';
 
             const isTextOnly = ['layout-text-two-col', 'layout-text-three-col'].includes(template);
@@ -736,18 +806,20 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
 
             const validImages = imagesData.filter(img => img.src !== null);
 
-            // Wipe classes
             if(captureArea) {
                 captureArea.classList.remove('no-primary-image', 'no-secondary-image');
             }
 
             if (isTextOnly) {
                 captureArea.classList.add('no-primary-image', 'no-secondary-image');
-            } else if (template === 'layout-launch') {
+            } else if (template === 'layout-launch' || template === 'layout-oped' || template === 'layout-interview' || template === 'layout-review') {
+                // These layouts stack their images entirely in the primary column/sidebar by default
+                // Review uses column 2 as the single image dump zone
                 validImages.forEach(img => slotPrimary.innerHTML += getPreviewImageHTML(img));
                 if (validImages.length === 0) captureArea.classList.add('no-primary-image');
-                captureArea.classList.add('no-secondary-image'); // Launch doesn't use slot 2 natively, they stack in slot 1
-            } else if (template === 'layout-sidebar') {
+                captureArea.classList.add('no-secondary-image'); 
+            } else if (['layout-sidebar', 'layout-investigative'].includes(template)) {
+                // Primary is top banner, secondary slot holds the rest
                 if (validImages[0]) slotPrimary.innerHTML = getPreviewImageHTML(validImages[0]);
                 else captureArea.classList.add('no-primary-image');
                 
@@ -760,7 +832,7 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
                 if (validImages[1]) slotSecondary.innerHTML = getPreviewImageHTML(validImages[1]);
                 else captureArea.classList.add('no-secondary-image');
             } else {
-                // Single image layouts (historic, feature, textheavy)
+                // Single image layouts (historic, feature, textheavy, obituary)
                 if (validImages[0]) slotPrimary.innerHTML = getPreviewImageHTML(validImages[0]);
                 else captureArea.classList.add('no-primary-image');
                 captureArea.classList.add('no-secondary-image');
@@ -784,7 +856,7 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
             };
             try {
                 localStorage.setItem('letoile_generator_state', JSON.stringify(state));
-            } catch (e) { console.warn('Could not save to localStorage (quota exceeded or disabled).'); }
+            } catch (e) { console.warn('Could not save to localStorage.'); }
         }
 
         function loadState() {
@@ -792,7 +864,7 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
             if (saved) {
                 try {
                     const state = JSON.parse(saved);
-                    document.getElementById('templateSelect').value = state.template || 'layout-launch';
+                    document.getElementById('templateSelect').value = state.template || 'layout-investigative';
                     document.getElementById('inCategory').value = state.category || '';
                     document.getElementById('inLocation').value = state.location || '';
                     document.getElementById('inDate').value = state.date || '';
@@ -808,7 +880,6 @@ The Democratic Concord stands ready to fight for Arcasia: back our troops, defen
                 } catch(e) { console.error('Failed to parse saved state.'); }
             }
             
-            // Ensure at least one image slot exists on first load
             if (imagesData.length === 0) {
                 imagesData.push({ id: generateId(), src: null, filter: 'grayscale', zoom: 1, panX: 50, panY: 50 });
             }
